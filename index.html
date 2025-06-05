@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="rsvp-container">
         <div class="language-selector">
             <button id="langEn" class="lang-button active">English</button>
@@ -32,12 +33,18 @@
                 <input type="hidden" id="guestSide" name="guestSideInput">
             </div>
             <div class="form-group">
-                <label for="chineseName" data-translate="chineseNameLabel">Chinese Name (姓名): <span id="chineseNameStar" class="required-star hidden">*</span></label>
+                <label for="chineseName">
+                     <span class="label-text"  data-translate="chineseNameLabel">Chinese Name (姓名):</span>
+                   <span id="chineseNameStar" class="required-star hidden">*</span>
+                </label> 
                 <input type="text" id="chineseName" name="chineseName">
                 <small id="chineseNameHelper" class="field-helper hidden" data-translate="chineseNameHelper"></small>
             </div>
             <div class="form-group">
-                <label for="englishName" data-translate="englishNameLabel">English Name: <span id="englishNameStar" class="required-star hidden">*</span></label>
+                <label for="englishName">
+                  <span class="label-text" data-translate="englishNameLabel">English Name:</span>
+                  <span id="englishNameStar" class="required-star hidden">*</span>
+                </label>
                 <input type="text" id="englishName" name="englishName">
                 <small id="englishNameHelper" class="field-helper hidden" data-translate="englishNameHelper"></small>
             </div>
