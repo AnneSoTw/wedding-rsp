@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding RSVP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="rsvp-container">
+        <div class="language-selector">
+            <button id="langEn" class="lang-button active">English</button>
+            <button id="langZh" class="lang-button">繁體中文</button>
+        </div>
+
+        <header id="rsvpHeader">
+            <h1 class="romantic-font" data-translate="headerTitle">Our Wedding</h1>
+            <img src="placeholder-wedding-image.jpg" alt="Couple" id="weddingImage" class="wedding-image">
+            <p data-translate="headerDescription">Join us to celebrate our special day! Please RSVP by [Your RSVP Date].</p>
+        </header>
+
+        <div id="page1" class="form-page">
+            <h2 data-translate="page1Title">Guest Information</h2>
+            <div class="form-group">
+                <label data-translate="guestSideLabel">Are you a guest of the:</label>
+                <div class="radio-group">
+                    <button class="choice-button" data-value="groom" name="guestSide" onclick="updateNameRequirement('groom')"><span class="lang-zh">新郎親友</span><span class="lang-en">Groom's Side</span></button>
+                    <button class="choice-button" data-value="bride" name="guestSide" onclick="updateNameRequirement('bride')"><span class="lang-zh">新娘親友</span><span class="lang-en">Bride's Side</span></button>
+                </div>
+                <input type="hidden" id="guestSide" name="guestSideInput">
+            </div>
+            <div class="form-group">
+                <label for="chineseName" data-translate="chineseNameLabel">Chinese Name (姓名):</label>
+                <input type="text" id="chineseName" name="chineseName">
+                <small id="chineseNameHelper" class="field-helper" data-translate="chineseNameHelper"></small>
+            </div>
+            <div class="form-group">
+                <label for="englishName" data-translate="englishNameLabel">English Name:</label>
+                <input type="text" id="englishName" name="englishName">
+                <small id="englishNameHelper" class="field-helper" data-translate="englishNameHelper"></small>
+            </div>
+            <div class="form-group">
+                <label for="email" data-translate="emailLabel">Email (電子郵件):</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label data-translate="attendanceLabel">Will you be able to attend?</label>
+                <div class="radio-group">
+                    <button class="choice-button" data-value="yes" name="attendance" onclick="handleAttendance('yes')"><span class="lang-zh">是的，我會參加</span><span class="lang-en">Yes, I will attend</span></button>
+                    <button class="choice-button" data-value="no" name="attendance" onclick="handleAttendance('no')"><span class="lang-zh">抱歉，無法出席</span><span class="lang-en">Sorry, I cannot attend</span></button>
+                </div>
+                <input type="hidden" id="attendance" name="attendanceInput">
+            </div>
+            <button id="nextPage1" class="form-button" onclick="validateAndGoToPage2()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+        </div>
+
+        <div id="page2" class="form-page hidden">
+            <h2 data-translate="page2Title">Accompanying Guests</h2>
+            <p data-translate="page2Description">Please add details for each person attending with you.</p>
+            <div id="guestListContainer">
+                </div>
+            <button class="form-button secondary" onclick="addGuestEntry()"><span class="lang-zh">新增同行賓客</span><span class="lang-en">Add Guest</span></button>
+            <hr>
+            <button id="nextPage2" class="form-button" onclick="validateAndGoToPage3()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            <button class="form-button alternate" onclick="showPage('page1')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+        </div>
+
+        <div id="page3" class="form-page hidden">
+            <h2 data-translate="page3Title">Contact Preferences</h2>
+            <p data-translate="page3Description">How do you prefer we contact you for updates?</p>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="phone" onchange="toggleContactInput('phone')">
+                    <span data-translate="contactPhone">Phone (電話)</span>
+                </label>
+                <input type="text" id="contactPhoneInput" name="contactPhoneInput" class="contact-input hidden" placeholder-translate="contactPhonePlaceholder">
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="email" onchange="toggleContactInput('email')">
+                    <span data-translate="contactEmail">Email (電子郵件)</span>
+                </label>
+                <input type="email" id="contactEmailInput" name="contactEmailInput" class="contact-input hidden" placeholder-translate="contactEmailPlaceholder">
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="line" onchange="toggleContactInput('line')">
+                    <span data-translate="contactLine">LINE</span>
+                </label>
+                <input type="text" id="contactLineInput" name="contactLineInput" class="contact-input hidden" placeholder-translate="contactLinePlaceholder">
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="whatsapp" onchange="toggleContactInput('whatsapp')">
+                    <span data-translate="contactWhatsapp">WhatsApp</span>
+                </label>
+                <input type="text" id="contactWhatsappInput" name="contactWhatsappInput" class="contact-input hidden" placeholder-translate="contactWhatsappPlaceholder">
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="ig" onchange="toggleContactInput('ig')">
+                    <span data-translate="contactIg">Instagram</span>
+                </label>
+                <input type="text" id="contactIgInput" name="contactIgInput" class="contact-input hidden" placeholder-translate="contactIgPlaceholder">
+            </div>
+             <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="contactMethod" value="facebook" onchange="toggleContactInput('facebook')">
+                    <span data-translate="contactFacebook">Facebook</span>
+                </label>
+                <input type="text" id="contactFacebookInput" name="contactFacebookInput" class="contact-input hidden" placeholder-translate="contactFacebookPlaceholder">
+            </div>
+            <button id="nextPage3" class="form-button" onclick="validateAndGoToFinalPage()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            <button class="form-button alternate" onclick="showPage('page2')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+        </div>
+
+        <div id="finalPage" class="form-page hidden">
+            <div id="finalPageContent">
+                <h2 data-translate="finalPageTitle">Final Step</h2>
+                <div class="form-group">
+                    <label for="message" data-translate="messageLabel">Any message for the couple?</label>
+                    <textarea id="message" name="message" rows="4" placeholder-translate="messagePlaceholder"></textarea>
+                </div>
+                <div class="line-contact">
+                    <p data-translate="lineInfo">You can also add us on LINE!</p>
+                    <img src="placeholder-line-qr.png" alt="LINE QR Code" id="lineQrCode" class="qr-code">
+                    <a href="YOUR_LINE_LINK_HERE" target="_blank" class="line-link" data-translate="lineLinkText">Click here to add us on LINE</a>
+                </div>
+                <button id="submitRsvp" class="form-button" onclick="submitForm()"><span class="lang-zh">送出回覆</span><span class="lang-en">Submit RSVP</span></button>
+                <div id="emailStatus" class="email-status-message"></div>
+            </div>
+            <div id="thankYouMessage" class="award-certificate hidden">
+                 <h2 class="award-title" data-translate="thankYouTitle">Thank You!</h2>
+                 <p class="award-text" data-translate="thankYouBody">Your response has been recorded. We look forward to celebrating with you (or will miss you)! A confirmation email has been sent.</p>
+                 <img src="placeholder-wedding-image.jpg" alt="Thank You" class="award-logo">
+                 <p class="save-the-date-text" data-translate="saveTheDate">Save the Date!</p>
+            </div>
+             <button id="backToStartButton" class="form-button alternate hidden" onclick="resetFormAndGoToStart()"><span class="lang-zh">返回首頁</span><span class="lang-en">Back to Start</span></button>
+        </div>
+
+    </div>
+
+    <template id="guestEntryTemplate">
+        <div class="guest-entry">
+            <h3 data-translate="guestEntryTitle">Guest</h3>
+            <div class="form-group">
+                <label data-translate="guestNameLabel">Name (姓名):</label>
+                <input type="text" name="guestName" required>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="isChild" onchange="toggleChildOptions(this)">
+                    <span data-translate="isChildLabel">Is this guest a child? (是否為兒童)</span>
+                </label>
+            </div>
+            <div class="child-options hidden">
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="childSeat">
+                        <span data-translate="childSeatLabel">Child Seat Needed? (需要兒童座椅?)</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="childMeal">
+                        <span data-translate="childMealLabel">Child Meal Needed? (需要兒童餐?)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label data-translate="mealPreferenceLabel">Meal Preference (飲食偏好):</label>
+                <select name="mealPreference">
+                    <option value="standard" data-translate="mealStandard">Standard (標準)</option>
+                    <option value="vegetarian" data-translate="mealVegetarian">Vegetarian (素食)</option>
+                    <option value="vegan" data-translate="mealVegan">Vegan (全素)</option>
+                    <option value="other" data-translate="mealOther">Other (其他 - please specify)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label data-translate="allergiesLabel">Any dietary restrictions or allergies? (飲食限制或過敏):</label>
+                <textarea name="allergies" rows="2" placeholder-translate="allergiesPlaceholder"></textarea>
+            </div>
+            <button class="remove-guest-button" onclick="removeGuestEntry(this)"><span class="lang-zh">移除此位</span><span class="lang-en">Remove</span></button>
+            <hr class="guest-divider">
+        </div>
+    </template>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
