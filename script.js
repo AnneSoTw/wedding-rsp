@@ -179,7 +179,7 @@ const translations = {
                 } else {
                      validationModalCloseButton.textContent = "OK"; // Fallback
                 }
-                
+                validationModalOverlay.classList.remove('hidden');
                 validationModalOverlay.classList.add('show');
             } else {
                 console.error("Modal elements not found. Falling back to alert for message:", message);
@@ -214,6 +214,7 @@ const translations = {
 
             document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button => {
                 button.addEventListener('click', (e) => {
+                    e.preventDefault();
                     document.querySelectorAll('.choice-button[name="guestSide"]').forEach(btn => btn.classList.remove('selected'));
                     e.currentTarget.classList.add('selected');
                     const side = e.currentTarget.dataset.value;
