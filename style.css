@@ -5,19 +5,19 @@ body {
     justify-content: center;
     align-items: flex-start; /* Align to top to see start of long form */
     min-height: 100vh;
-    padding: 2rem 1rem; /* Increased padding for better spacing */
+    padding: 2rem 1rem; 
     color: #5d4037;
     box-sizing: border-box;
-    overflow-y: auto; /* Allow scrolling for long content */
+    overflow-y: auto; 
 }
 
 .rsvp-container {
     background-color: #ffffff;
     border-radius: 1rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 2rem 2.5rem; /* Adjusted padding */
+    padding: 2rem 2.5rem; 
     width: 100%;
-    max-width: 700px; /* Slightly wider for complex form */
+    max-width: 700px; 
     text-align: center;
     border: 1px solid #d7ccc8;
 }
@@ -51,7 +51,7 @@ body {
 }
 
 .wedding-image {
-    max-width: 200px; /* Adjust as needed */
+    max-width: 200px; 
     height: auto;
     border-radius: 0.75rem;
     margin: 1rem auto;
@@ -62,13 +62,13 @@ body {
 .romantic-font {
     font-family: 'Dancing Script', 'Noto Sans TC', cursive;
     color: #8d6e63;
-    font-size: 2.8rem; /* Larger title */
+    font-size: 2.8rem; 
     margin-bottom: 0.5rem;
 }
 
 .lang-zh {
     display: block;
-    font-weight: normal; /* Adjusted from bold for general text */
+    font-weight: normal; 
     margin-bottom: 0.15rem;
     font-family: 'Noto Sans TC', sans-serif;
 }
@@ -79,7 +79,7 @@ body {
 
 .form-page {
     margin-bottom: 2rem;
-    text-align: left; /* Align form content to left */
+    text-align: left; 
 }
 
 .form-page h2 {
@@ -100,6 +100,12 @@ body {
     color: #795548;
 }
 
+.required-star {
+    color: red;
+    margin-left: 4px;
+    font-weight: bold;
+}
+
 .field-helper {
     font-size: 0.8em;
     color: #a1887f;
@@ -117,7 +123,7 @@ textarea {
     border: 1px solid #d7ccc8;
     border-radius: 0.5rem;
     font-family: 'Merriweather', 'Noto Sans TC', serif;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box; 
     color: #5d4037;
     background-color: #fdfdfb;
 }
@@ -127,7 +133,7 @@ input[type="email"]:focus,
 select:focus,
 textarea:focus {
     border-color: #d4af37;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2); /* Softer focus */
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2); 
     outline: none;
 }
 
@@ -137,28 +143,28 @@ textarea {
 
 .radio-group {
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-    gap: 0.75rem; /* Space between buttons */
+    flex-wrap: wrap; 
+    gap: 0.75rem; 
     margin-bottom: 0.5rem;
 }
 
 .choice-button {
-    flex-grow: 1; /* Allow buttons to grow and fill space */
+    flex-grow: 1; 
     background-color: #f5f5f5;
     color: #5d4037;
     padding: 0.85rem;
     border-radius: 0.5rem;
     border: 1px solid #e0e0e0;
     transition: all 0.2s ease;
-    text-align: center; /* Center text within button */
+    text-align: center; 
     font-family: 'Merriweather', 'Noto Sans TC', serif;
     line-height: 1.4;
     cursor: pointer;
 }
-.choice-button.selected, /* Class to mark selected state */
+.choice-button.selected, 
 .choice-button:hover {
     border-color: #d4af37;
-    background-color: #fff9e6; /* Lighter gold */
+    background-color: #fff9e6; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .choice-button .lang-zh { color: inherit; font-weight: bold; }
@@ -174,12 +180,21 @@ textarea {
 }
 .checkbox-label input[type="checkbox"] {
     margin-right: 0.5rem;
-    width: auto; /* Override default 100% width */
-    accent-color: #8d6e63; /* Style checkbox color */
+    width: auto; 
+    accent-color: #8d6e63; 
 }
 
 .contact-input {
     margin-top: 0.5rem;
+}
+
+/* Container for centering navigation buttons */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Space between buttons if there are multiple like prev/next */
+    margin-top: 2rem; /* More space above button groups */
+    margin-bottom: 1rem;
 }
 
 .form-button {
@@ -195,8 +210,7 @@ textarea {
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 1.5rem;
-    display: inline-block;
+    /* margin-top removed for group control, display inline-block is fine for flex items */
     line-height: 1.4;
     text-align: center;
 }
@@ -212,14 +226,14 @@ textarea {
     transform: translateY(0);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-/* Secondary button style */
+
 .form-button.secondary {
-    background-image: linear-gradient(to right, #a1887f, #8d6e63); /* Muted brown gradient */
+    background-image: linear-gradient(to right, #a1887f, #8d6e63); 
 }
 .form-button.secondary:hover {
     filter: brightness(1.1);
 }
-/* Alternate button style (e.g., for 'Previous') */
+
 .form-button.alternate {
     background-image: none;
     background-color: #f5f0e8;
@@ -228,11 +242,18 @@ textarea {
 }
 .form-button.alternate:hover {
     background-color: #e6dacb;
-    filter: none; /* Remove brightness filter for this style */
+    filter: none; 
 }
 
+/* Styling for Add Guest Button Container */
+.add-guest-button-container {
+    text-align: center; /* Centers the button */
+    margin-top: 1.5rem; /* Space above the button */
+    margin-bottom: 1.5rem; /* Space below the button */
+}
 
 .guest-entry {
+    position: relative; /* For absolute positioning of the delete button */
     border: 1px solid #e0e0e0;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -245,27 +266,31 @@ textarea {
     margin-bottom: 1rem;
     font-size: 1.2rem;
 }
+
+.remove-guest-button {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    background-color: transparent;
+    border: none;
+    font-size: 1.6rem; /* Slightly larger for better visibility */
+    cursor: pointer;
+    color: #c62828; /* A more distinct red */
+    padding: 0.25rem; 
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+.remove-guest-button:hover {
+    color: #e53935; /* Brighter red on hover */
+}
+
+
 .child-options {
     padding-left: 1rem;
     margin-top: 0.5rem;
     border-left: 2px solid #e0e0e0;
 }
-.remove-guest-button {
-    font-family: 'Merriweather', 'Noto Sans TC', serif;
-    background-color: #e57373; /* Soft red */
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.8rem;
-    margin-top: 1rem;
-    display: inline-block;
-}
-.remove-guest-button:hover {
-    background-color: #d32f2f; /* Darker red */
-}
+
 hr.guest-divider {
     border: 0;
     height: 1px;
@@ -318,9 +343,9 @@ hr.guest-divider {
 }
 .award-text .lang-zh, .award-text .lang-en { color: inherit; }
 .award-logo {
-    display: block; width: 100px; height: 100px; /* Adjusted size */
+    display: block; width: 100px; height: 100px; 
     margin: 1.5rem auto 1rem auto; border-radius: 0.25rem;
-    object-fit: cover; /* Changed from contain if it's more like a logo/photo */
+    object-fit: cover; 
 }
 .save-the-date-text {
     margin-top: 0.75rem; font-size: 0.9rem; color: #a1887f;
@@ -330,7 +355,7 @@ hr.guest-divider {
 
 
 .hidden {
-    display: none !important; /* Use important to override other display properties if necessary */
+    display: none !important; 
 }
 
 /* Responsive Adjustments */
@@ -343,12 +368,20 @@ hr.guest-divider {
     }
     .form-button {
         padding: 0.7rem 1.5rem;
-        font-size: 0.9rem; /* Adjust base font size for buttons too */
+        font-size: 0.9rem; 
     }
     .form-button .lang-en {
-        font-size: 0.75em; /* Adjust lang-en within buttons */
+        font-size: 0.75em; 
     }
     .choice-button {
         padding: 0.75rem;
+    }
+    .navigation-buttons {
+        flex-direction: column; /* Stack buttons on small screens if needed */
+        align-items: center;
+    }
+    .navigation-buttons .form-button {
+        width: 80%; /* Make buttons take more width when stacked */
+        max-width: 300px;
     }
 }
