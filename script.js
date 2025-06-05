@@ -469,7 +469,6 @@ const translations = {
         function showFinalPageForNoAttending() {
             document.getElementById('finalPageContent').classList.remove('hidden');
             document.getElementById('thankYouMessage').classList.add('hidden');
-            document.getElementById('backToStartButton').classList.add('hidden');
             showPage('finalPage');
         }
 
@@ -667,7 +666,6 @@ const translations = {
             
             document.getElementById('finalPageContent').classList.remove('hidden');
             document.getElementById('thankYouMessage').classList.add('hidden');
-            document.getElementById('backToStartButton').classList.add('hidden'); 
             showPage('finalPage');
         }
 
@@ -738,7 +736,6 @@ const translations = {
                 
                 document.getElementById('finalPageContent').classList.add('hidden');
                 document.getElementById('thankYouMessage').classList.remove('hidden');
-                document.getElementById('backToStartButton').classList.remove('hidden');
                 updateThankYouMessage();
                 return;
             }
@@ -760,7 +757,6 @@ const translations = {
                     
                     document.getElementById('finalPageContent').classList.add('hidden');
                     document.getElementById('thankYouMessage').classList.remove('hidden');
-                    document.getElementById('backToStartButton').classList.remove('hidden');
                     updateThankYouMessage();
                 })
                 .catch((error) => {
@@ -824,8 +820,7 @@ const translations = {
             if(finalPageContent) finalPageContent.classList.remove('hidden');
             const thankYouMsg = document.getElementById('thankYouMessage');
             if(thankYouMsg) thankYouMsg.classList.add('hidden');
-            const backToStartBtn = document.getElementById('backToStartButton');
-            if(backToStartBtn) backToStartBtn.classList.add('hidden');
+
             const emailStatus = document.getElementById('emailStatus');
             if(emailStatus) {
                 emailStatus.textContent = '';
