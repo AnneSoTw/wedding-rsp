@@ -28,6 +28,16 @@ body {
             margin-bottom: 1.5rem;
         }
 
+.language-selector select {
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  min-width: 130px;
+}
+
         .lang-button {
             font-family: 'Merriweather', 'Noto Sans TC', serif;
             background-color: #f0eade;
