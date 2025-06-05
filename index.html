@@ -31,28 +31,30 @@
                 <input type="hidden" id="guestSide" name="guestSideInput">
             </div>
             <div class="form-group">
-                <label for="chineseName" data-translate="chineseNameLabel">Chinese Name (姓名):</label>
+                <label for="chineseName" data-translate="chineseNameLabel">Chinese Name (姓名): <span id="chineseNameStar" class="required-star hidden">*</span></label>
                 <input type="text" id="chineseName" name="chineseName">
                 <small id="chineseNameHelper" class="field-helper" data-translate="chineseNameHelper"></small>
             </div>
             <div class="form-group">
-                <label for="englishName" data-translate="englishNameLabel">English Name:</label>
+                 <label for="englishName" data-translate="englishNameLabel">English Name: <span id="englishNameStar" class="required-star hidden">*</span></label>
                 <input type="text" id="englishName" name="englishName">
                 <small id="englishNameHelper" class="field-helper" data-translate="englishNameHelper"></small>
             </div>
             <div class="form-group">
-                <label for="email" data-translate="emailLabel">Email (電子郵件):</label>
+                <label for="email" data-translate="emailLabel">Email (電子郵件): <span class="required-star">*</span></label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
-                <label data-translate="attendanceLabel">Will you be able to attend?</label>
+                <label data-translate="attendanceLabel">Will you be able to attend? <span class="required-star">*</span></label>
                 <div class="radio-group">
                     <button class="choice-button" data-value="yes" name="attendance" onclick="handleAttendance('yes')"><span class="lang-zh">是的，我會參加</span><span class="lang-en">Yes, I will attend</span></button>
                     <button class="choice-button" data-value="no" name="attendance" onclick="handleAttendance('no')"><span class="lang-zh">抱歉，無法出席</span><span class="lang-en">Sorry, I cannot attend</span></button>
                 </div>
                 <input type="hidden" id="attendance" name="attendanceInput">
             </div>
-            <button id="nextPage1" class="form-button" onclick="validateAndGoToPage2()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            <div class="navigation-buttons">
+                <button id="nextPage1" class="form-button" onclick="validateAndGoToPage2()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            </div>
         </div>
 
         <div id="page2" class="form-page hidden">
@@ -60,15 +62,19 @@
             <p data-translate="page2Description">Please add details for each person attending with you.</p>
             <div id="guestListContainer">
                 </div>
-            <button class="form-button secondary" onclick="addGuestEntry()"><span class="lang-zh">新增同行賓客</span><span class="lang-en">Add Guest</span></button>
+            <div class="add-guest-button-container">
+                <button class="form-button secondary" onclick="addGuestEntry()"><span class="lang-zh">新增同行賓客</span><span class="lang-en">Add Guest</span></button>
+            </div>
             <hr>
-            <button id="nextPage2" class="form-button" onclick="validateAndGoToPage3()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
-            <button class="form-button alternate" onclick="showPage('page1')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+             <div class="navigation-buttons">
+                <button class="form-button alternate" onclick="showPage('page1')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+                <button id="nextPage2" class="form-button" onclick="validateAndGoToPage3()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            </div>
         </div>
 
         <div id="page3" class="form-page hidden">
             <h2 data-translate="page3Title">Contact Preferences</h2>
-            <p data-translate="page3Description">How do you prefer we contact you for updates?</p>
+            <p data-translate="page3Description">How do you prefer we contact you for updates? (At least one method required)</p>
             <div class="form-group">
                 <label class="checkbox-label">
                     <input type="checkbox" name="contactMethod" value="phone" onchange="toggleContactInput('phone')">
@@ -111,8 +117,10 @@
                 </label>
                 <input type="text" id="contactFacebookInput" name="contactFacebookInput" class="contact-input hidden" placeholder-translate="contactFacebookPlaceholder">
             </div>
-            <button id="nextPage3" class="form-button" onclick="validateAndGoToFinalPage()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
-            <button class="form-button alternate" onclick="showPage('page2')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+             <div class="navigation-buttons">
+                <button class="form-button alternate" onclick="showPage('page2')"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
+                <button id="nextPage3" class="form-button" onclick="validateAndGoToFinalPage()"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+            </div>
         </div>
 
         <div id="finalPage" class="form-page hidden">
@@ -127,7 +135,9 @@
                     <img src="placeholder-line-qr.png" alt="LINE QR Code" id="lineQrCode" class="qr-code">
                     <a href="YOUR_LINE_LINK_HERE" target="_blank" class="line-link" data-translate="lineLinkText">Click here to add us on LINE</a>
                 </div>
-                <button id="submitRsvp" class="form-button" onclick="submitForm()"><span class="lang-zh">送出回覆</span><span class="lang-en">Submit RSVP</span></button>
+                 <div class="navigation-buttons">
+                    <button id="submitRsvp" class="form-button" onclick="submitForm()"><span class="lang-zh">送出回覆</span><span class="lang-en">Submit RSVP</span></button>
+                </div>
                 <div id="emailStatus" class="email-status-message"></div>
             </div>
             <div id="thankYouMessage" class="award-certificate hidden">
@@ -136,16 +146,18 @@
                  <img src="placeholder-wedding-image.jpg" alt="Thank You" class="award-logo">
                  <p class="save-the-date-text" data-translate="saveTheDate">Save the Date!</p>
             </div>
-             <button id="backToStartButton" class="form-button alternate hidden" onclick="resetFormAndGoToStart()"><span class="lang-zh">返回首頁</span><span class="lang-en">Back to Start</span></button>
+             <div class="navigation-buttons">
+                <button id="backToStartButton" class="form-button alternate hidden" onclick="resetFormAndGoToStart()"><span class="lang-zh">返回首頁</span><span class="lang-en">Back to Start</span></button>
+            </div>
         </div>
-
     </div>
 
     <template id="guestEntryTemplate">
         <div class="guest-entry">
+            <button class="remove-guest-button hidden" onclick="removeGuestEntry(this)">&#128465;</button>
             <h3 data-translate="guestEntryTitle">Guest</h3>
             <div class="form-group">
-                <label data-translate="guestNameLabel">Name (姓名):</label>
+                <label data-translate="guestNameLabel">Name (姓名): <span class="required-star">*</span></label>
                 <input type="text" name="guestName" required>
             </div>
             <div class="form-group">
@@ -181,7 +193,6 @@
                 <label data-translate="allergiesLabel">Any dietary restrictions or allergies? (飲食限制或過敏):</label>
                 <textarea name="allergies" rows="2" placeholder-translate="allergiesPlaceholder"></textarea>
             </div>
-            <button class="remove-guest-button" onclick="removeGuestEntry(this)"><span class="lang-zh">移除此位</span><span class="lang-en">Remove</span></button>
             <hr class="guest-divider">
         </div>
     </template>
