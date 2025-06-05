@@ -28,14 +28,14 @@
             <div class="form-group">
                 <label data-translate="guestSideLabel">Are you a guest of the:</label>
                 <div class="radio-group">
-                    <button class="choice-button" data-value="groom" name="guestSide"><span class="lang-zh">新郎親友</span><span class="lang-en">Groom's Side</span></button>
-                    <button class="choice-button" data-value="bride" name="guestSide"><span class="lang-zh">新娘親友</span><span class="lang-en">Bride's Side</span></button>
+                    <button class="choice-button" data-value="groom" name="guestSide" data-translate="guestSideGroom"></button>
+                    <button class="choice-button" data-value="bride" name="guestSide" data-translate="guestSideBride"></button>
                 </div>
                 <input type="hidden" id="guestSide" name="guestSideInput">
             </div>
             <div class="form-group">
                 <label for="chineseName">
-                     <span class="label-text"  data-translate="chineseNameLabel">Chinese Name (姓名):</span>
+                   <span class="label-text"  data-translate="chineseNameLabel">Chinese Name (姓名):</span>
                    <span id="chineseNameStar" class="required-star hidden">*</span>
                 </label> 
                 <input type="text" id="chineseName" name="chineseName">
@@ -56,8 +56,8 @@
             <div class="form-group">
                 <label data-translate="attendanceLabel">Will you be able to attend? <span class="required-star">*</span></label>
                 <div class="radio-group">
-                    <button class="choice-button" data-value="yes" name="attendance"><span class="lang-zh">是的，我會參加</span><span class="lang-en">Yes, I will attend</span></button>
-                    <button class="choice-button" data-value="no" name="attendance"><span class="lang-zh">抱歉，無法出席</span><span class="lang-en">Sorry, I cannot attend</span></button>
+                    <button class="choice-button" data-value="yes" name="attendance" data-translate="attendanceYes"></button>
+                    <button class="choice-button" data-value="no" name="attendance" data-translate="attendanceNo"></button>
                 </div>
                 <input type="hidden" id="attendance" name="attendanceInput">
             </div>
@@ -74,12 +74,12 @@
                 <!-- Guest entries will be added here -->
             </div>
             <div class="add-guest-button-container">
-                <button id="addGuestBtn" class="form-button secondary"><span class="lang-zh">新增同行賓客</span><span class="lang-en">Add Guest</span></button>
+                <button id="addGuestBtn" class="form-button secondary" data-translate="addGuestButton"></button>
             </div>
             <hr>
             <div class="navigation-buttons">
-                <button id="prevToPage1" class="form-button alternate"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
-                <button id="nextPage2" class="form-button"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+                <button id="prevToPage1" class="form-button alternate" data-translate="prevButton"></button>
+                <button id="nextPage2" class="form-button" data-translate="nextButton"></button>
             </div>
         </div>
 
