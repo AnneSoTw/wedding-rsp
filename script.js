@@ -316,7 +316,6 @@ const translations = {
             document.getElementById('nextPage3').addEventListener('click', validateAndGoToFinalPage);
             
             document.getElementById('submitRsvp').addEventListener('click', submitForm);
-            document.getElementById('backToStartButton').addEventListener('click', resetFormAndGoToStart);
         });
 
         function setLanguage(lang) {
