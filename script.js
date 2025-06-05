@@ -344,12 +344,13 @@ const translations = {
 
             document.getElementById('langEn').classList.toggle('active', lang === 'en');
             document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+            document.getElementById('langFr').classList.toggle('active', lang === 'fr');
 
             const guestSideValue = document.getElementById('guestSide').value;
             updateNameRequirementVisuals(guestSideValue); 
             
             // Style bilingual spans within buttons/elements based on current language
-            document.querySelectorAll('.lang-en, .lang-zh').forEach(span => {
+            document.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => {
                 if (span.classList.contains(`lang-${currentLanguage}`)) {
                     span.style.display = 'block';
                 } else {
@@ -530,7 +531,7 @@ const translations = {
         }
 
         function setLanguageSpansVisibility(container = document) {
-            container.querySelectorAll('.lang-en, .lang-zh').forEach(span => {
+            container.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => {
                 if (span.classList.contains(`lang-${currentLanguage}`)) {
                     span.style.display = 'block'; // Or 'inline' or '' depending on original display
                 } else {
@@ -558,6 +559,7 @@ const translations = {
 
             document.getElementById('langEn').classList.toggle('active', lang === 'en');
             document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+            document.getElementById('langFr').classList.toggle('active', lang === 'fr');
 
             const guestSideValue = document.getElementById('guestSide').value;
             updateNameRequirementVisuals(guestSideValue); 
