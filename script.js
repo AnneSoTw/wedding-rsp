@@ -143,7 +143,7 @@ const translations = {
                 validationMinOneContact: "請至少選擇並填寫一種聯絡方式。",
                 backToStart: "返回首頁"
             },
-            en: {
+            fr: {
                 headerTitle: "Notre Mariage",
                 headerDescription: "Joignez nous pour celebrer notre mariage. Repondez avant le.",
                 page1Title: "Information Invitee",
