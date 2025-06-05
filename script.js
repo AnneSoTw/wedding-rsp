@@ -281,9 +281,9 @@ const translations = {
             setLanguage(currentLanguage); 
             showPage(currentPage);      
 
-            document.getElementById('languageSelect').addEventListener('change', (e) => {
-              setLanguage(e.target.value);
-            });
+            document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('langZh').addEventListener('click', () => setLanguage('zh'));
+            document.getElementById('langFr').addEventListener('click', () => setLanguage('fr'));
 
             document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button => {
                 button.addEventListener('click', (e) => {
