@@ -283,7 +283,7 @@ const translations = {
 
             document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
             document.getElementById('langZh').addEventListener('click', () => setLanguage('zh'));
-            document.getElementById('langZh').addEventListener('click', () => setLanguage('fr'));
+            document.getElementById('langFr').addEventListener('click', () => setLanguage('fr'));
 
             document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button => {
                 button.addEventListener('click', (e) => {
