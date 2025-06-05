@@ -16,7 +16,6 @@ const translations = {
         attendanceNo: "Sorry, I cannot attend",
         nextButton: "Next",
         prevButton: "Previous",
-        // Page 2
         page2Title: "Accompanying Guests",
         page2Description: "Please add details for each person attending with you (including yourself if you are attending).",
         addGuestButton: "Add Guest",
@@ -32,10 +31,9 @@ const translations = {
         mealOther: "Other (其他 - please specify)",
         allergiesLabel: "Any dietary restrictions or allergies? (飲食限制或過敏):",
         allergiesPlaceholder: "e.g., nuts, gluten-free...",
-        removeGuestButton: "Remove",
-        // Page 3
+        removeGuestButton: "Remove", // Still needed for lang toggle on dynamic buttons if they had text
         page3Title: "Contact Preferences",
-        page3Description: "How do you prefer we contact you for updates? (Select all that apply and provide details)",
+        page3Description: "How do you prefer we contact you for updates? (At least one method required)",
         contactPhone: "Phone (電話)",
         contactPhonePlaceholder: "Enter phone number",
         contactEmail: "Email (電子郵件)",
@@ -48,23 +46,19 @@ const translations = {
         contactIgPlaceholder: "Enter Instagram handle",
         contactFacebook: "Facebook",
         contactFacebookPlaceholder: "Enter Facebook name/profile link",
-        // Final Page
         finalPageTitle: "Final Step",
         messageLabel: "Any message for the couple?",
         messagePlaceholder: "Your wishes, song requests, etc.",
         lineInfo: "You can also add us on LINE!",
         lineLinkText: "Click here to add us on LINE",
         submitRsvpButton: "Submit RSVP",
-        // Thank You
         thankYouTitle: "Thank You!",
         thankYouBodyAttending: "Your response has been recorded. We eagerly look forward to celebrating with you! A confirmation email has been sent.",
         thankYouBodyNotAttending: "Your response has been recorded. We're sad you can't make it, but we appreciate you letting us know. A confirmation email has been sent.",
         saveTheDate: "We're Excited!",
-        // Status Messages
         emailSending: "Sending your RSVP...",
         emailSuccess: "RSVP sent successfully! You should receive a confirmation email shortly.",
         emailError: "Failed to send RSVP. Please try again or contact us directly.",
-        // Validation
         validationRequired: "This field is required.",
         validationEmail: "Please enter a valid email address.",
         validationGuestSide: "Please select if you are a guest of the Groom or Bride.",
@@ -72,8 +66,8 @@ const translations = {
         validationChineseNameRequired: "Chinese name is required for Groom's side.",
         validationEnglishNameRequired: "English name is required for Bride's side.",
         validationContactMethod: "Please provide details for the selected contact methods.",
+        validationMinOneContact: "Please select and provide details for at least one contact method.", // New
         backToStart: "Back to Start"
-
     },
     zh: {
         headerTitle: "我們的婚禮",
@@ -92,7 +86,6 @@ const translations = {
         attendanceNo: "抱歉，無法出席",
         nextButton: "下一步",
         prevButton: "上一頁",
-        // Page 2
         page2Title: "同行賓客資料",
         page2Description: "請填寫所有出席賓客的資料（若您會出席，也請包含您自己）。",
         addGuestButton: "新增同行賓客",
@@ -108,10 +101,9 @@ const translations = {
         mealOther: "其他 (請註明)",
         allergiesLabel: "飲食限制或過敏:",
         allergiesPlaceholder: "例如：堅果、無麩質...",
-        removeGuestButton: "移除此位",
-        // Page 3
+        removeGuestButton: "移除此位", // Still needed
         page3Title: "聯絡偏好",
-        page3Description: "我們應如何與您聯絡後續事宜？（可複選並填寫資料）",
+        page3Description: "我們應如何與您聯絡後續事宜？（至少需擇一並填寫資料）",
         contactPhone: "電話",
         contactPhonePlaceholder: "請輸入電話號碼",
         contactEmail: "電子郵件",
@@ -124,23 +116,19 @@ const translations = {
         contactIgPlaceholder: "請輸入Instagram帳號",
         contactFacebook: "Facebook",
         contactFacebookPlaceholder: "請輸入Facebook名稱/個人檔案連結",
-        // Final Page
         finalPageTitle: "最後一步",
         messageLabel: "給新人的祝福或留言：",
         messagePlaceholder: "您的祝福、想點播的歌曲等",
         lineInfo: "您也可以加入我們的LINE！",
         lineLinkText: "點此加入我們的LINE",
         submitRsvpButton: "送出回覆",
-        // Thank You
         thankYouTitle: "感謝您！",
         thankYouBodyAttending: "您的回覆已成功送出。我們熱切期待與您一同慶祝！確認郵件已寄出。",
         thankYouBodyNotAttending: "您的回覆已成功送出。很遺憾您無法參加，但感謝您的告知。確認郵件已寄出。",
         saveTheDate: "期待相見！",
-        // Status Messages
         emailSending: "正在發送您的回覆...",
         emailSuccess: "回覆已成功發送！您很快就會收到一封確認郵件。",
         emailError: "回覆發送失敗。請稍後再試或直接與我們聯繫。",
-         // Validation
         validationRequired: "此欄位為必填。",
         validationEmail: "請輸入有效的電子郵件地址。",
         validationGuestSide: "請選擇您是男方或女方親友。",
@@ -148,6 +136,7 @@ const translations = {
         validationChineseNameRequired: "新郎親友需填寫中文姓名。",
         validationEnglishNameRequired: "新娘親友需填寫英文姓名。",
         validationContactMethod: "請為已選的聯絡方式提供詳細資料。",
+        validationMinOneContact: "請至少選擇並填寫一種聯絡方式。", // New
         backToStart: "返回首頁"
     }
 };
@@ -158,20 +147,19 @@ const rsvpData = {
     guests: []
 };
 
-// --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
     setLanguage(currentLanguage);
     showPage(currentPage);
     document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
     document.getElementById('langZh').addEventListener('click', () => setLanguage('zh'));
 
-    // Initialize choice buttons
     document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button => {
         button.addEventListener('click', (e) => {
             document.querySelectorAll('.choice-button[name="guestSide"]').forEach(btn => btn.classList.remove('selected'));
             e.currentTarget.classList.add('selected');
-            document.getElementById('guestSide').value = e.currentTarget.dataset.value;
-            updateNameRequirement(e.currentTarget.dataset.value);
+            const side = e.currentTarget.dataset.value;
+            document.getElementById('guestSide').value = side;
+            updateNameRequirement(side); // Call new function
         });
     });
      document.querySelectorAll('.choice-button[name="attendance"]').forEach(button => {
@@ -179,18 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.choice-button[name="attendance"]').forEach(btn => btn.classList.remove('selected'));
             e.currentTarget.classList.add('selected');
             document.getElementById('attendance').value = e.currentTarget.dataset.value;
+            // No direct call to handleAttendance on click, it's called before page progression
         });
     });
 
-    // EmailJS Init - REPLACE WITH YOUR ACTUAL ID
-    emailjs.init("YOUR_USER_PUBLIC_KEY"); // Replace with your EmailJS User ID (Public Key)
-
-    // Pre-add one guest entry if attending (for the main respondent)
-    // addGuestEntry(true); // Add main respondent by default
+    emailjs.init("YOUR_USER_PUBLIC_KEY"); 
 });
 
-
-// --- LANGUAGE TOGGLE ---
 function setLanguage(lang) {
     currentLanguage = lang;
     document.documentElement.lang = lang;
@@ -207,36 +190,29 @@ function setLanguage(lang) {
         }
     });
 
-    // Update active lang button
     document.getElementById('langEn').classList.toggle('active', lang === 'en');
     document.getElementById('langZh').classList.toggle('active', lang === 'zh');
 
-    // Update name requirement helpers based on current language
     const guestSide = document.getElementById('guestSide').value;
-    if (guestSide) {
-        updateNameRequirement(guestSide);
-    } else { // Default prompt if no side selected yet
-        document.getElementById('chineseNameHelper').textContent = translations[currentLanguage].chineseNameHelper;
-        document.getElementById('englishNameHelper').textContent = translations[currentLanguage].englishNameHelper;
-    }
+    updateNameRequirement(guestSide); // Re-evaluate name requirements on lang change
 
-     // Update button text for dynamically added elements like remove guest
-    document.querySelectorAll('.remove-guest-button').forEach(button => {
-        button.innerHTML = `<span class="lang-zh">${translations.zh.removeGuestButton}</span><span class="lang-en">${translations.en.removeGuestButton}</span>`;
-    });
+    // For dynamically added remove buttons, if they had text (not relevant for icon)
+    // document.querySelectorAll('.remove-guest-button').forEach(button => {
+    //     button.innerHTML = `<span class="lang-zh">${translations.zh.removeGuestButton}</span><span class="lang-en">${translations.en.removeGuestButton}</span>`;
+    // });
     document.querySelectorAll('.guest-entry h3').forEach(header => {
-         header.innerHTML = `<span class="lang-zh">${translations.zh.guestEntryTitle}</span><span class="lang-en">${translations.en.guestEntryTitle}</span>`;
+         header.setAttribute('data-translate', 'guestEntryTitle'); // Ensure it has the key
+         header.innerHTML = translations[currentLanguage].guestEntryTitle;
     });
 }
 
-// --- PAGE NAVIGATION ---
 function showPage(pageId) {
     document.querySelectorAll('.form-page').forEach(page => page.classList.add('hidden'));
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
         targetPage.classList.remove('hidden');
         currentPage = pageId;
-        window.scrollTo(0, 0); // Scroll to top of page
+        window.scrollTo(0, 0); 
     } else {
         console.error("Page not found:", pageId);
     }
@@ -248,39 +224,36 @@ function updateNameRequirement(side) {
     const englishNameInput = document.getElementById('englishName');
     const chineseNameHelper = document.getElementById('chineseNameHelper');
     const englishNameHelper = document.getElementById('englishNameHelper');
+    const chineseNameStar = document.getElementById('chineseNameStar');
+    const englishNameStar = document.getElementById('englishNameStar');
 
-    chineseNameInput.required = (side === 'groom');
-    englishNameInput.required = (side === 'bride');
-
-    chineseNameHelper.textContent = translations[currentLanguage].chineseNameHelper;
-    englishNameHelper.textContent = translations[currentLanguage].englishNameHelper;
+    // Reset first
+    chineseNameInput.required = false;
+    englishNameInput.required = false;
+    chineseNameStar.classList.add('hidden');
+    englishNameStar.classList.add('hidden');
+    chineseNameHelper.style.fontWeight = 'normal';
+    englishNameHelper.style.fontWeight = 'normal';
 
     if (side === 'groom') {
+        chineseNameInput.required = true;
+        chineseNameStar.classList.remove('hidden');
         chineseNameHelper.style.fontWeight = 'bold';
-        englishNameHelper.style.fontWeight = 'normal';
     } else if (side === 'bride') {
+        englishNameInput.required = true;
+        englishNameStar.classList.remove('hidden');
         englishNameHelper.style.fontWeight = 'bold';
-        chineseNameHelper.style.fontWeight = 'normal';
-    } else {
-        englishNameHelper.style.fontWeight = 'normal';
-        chineseNameHelper.style.fontWeight = 'normal';
     }
+
+    // Update helper text language regardless
+    chineseNameHelper.textContent = translations[currentLanguage].chineseNameHelper;
+    englishNameHelper.textContent = translations[currentLanguage].englishNameHelper;
 }
 
-function handleAttendance(response) {
-    document.getElementById('attendance').value = response; // Already handled by choice-button setup
-    const nextPage1Button = document.getElementById('nextPage1');
-    if (response === 'no') {
-        // Change button text/function if going straight to final page
-        nextPage1Button.onclick = () => {
-            if (validatePage1()) {
-                rsvpData.attending = 'no';
-                showFinalPageForNoAttending();
-            }
-        };
-    } else {
-        nextPage1Button.onclick = () => validateAndGoToPage2();
-    }
+
+function handleAttendance(response) { // This function is now less critical for button logic
+    // document.getElementById('attendance').value = response; // Set by choice button already
+    // Logic to change Next button's destination is handled in validateAndGoToPage2
 }
 
 function validatePage1() {
@@ -288,7 +261,8 @@ function validatePage1() {
     const guestSide = document.getElementById('guestSide').value;
     const chineseName = document.getElementById('chineseName').value.trim();
     const englishName = document.getElementById('englishName').value.trim();
-    const email = document.getElementById('email').value.trim();
+    const emailInput = document.getElementById('email');
+    const email = emailInput.value.trim();
     const attendance = document.getElementById('attendance').value;
 
     if (!guestSide) {
@@ -296,17 +270,18 @@ function validatePage1() {
         isValid = false;
     } else if (guestSide === 'groom' && !chineseName) {
         alert(translations[currentLanguage].validationChineseNameRequired);
-        isValid = false;
         document.getElementById('chineseName').focus();
+        isValid = false;
     } else if (guestSide === 'bride' && !englishName) {
         alert(translations[currentLanguage].validationEnglishNameRequired);
-        isValid = false;
         document.getElementById('englishName').focus();
+        isValid = false;
     }
+
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
         alert(translations[currentLanguage].validationEmail);
+        if(isValid) emailInput.focus(); // Focus only if previous checks passed
         isValid = false;
-        if(isValid) document.getElementById('email').focus(); // only focus if previous checks passed
     }
     if (!attendance) {
         alert(translations[currentLanguage].validationAttendance);
@@ -324,16 +299,15 @@ function validateAndGoToPage2() {
     rsvpData.attending = document.getElementById('attendance').value;
 
     if (rsvpData.attending === 'yes') {
-        // Ensure at least one guest entry for the respondent themselves
-        if (document.getElementById('guestListContainer').childElementCount === 0) {
-             addGuestEntry(true); // Add main respondent
+        const guestListContainer = document.getElementById('guestListContainer');
+        if (guestListContainer.childElementCount === 0) {
+             addGuestEntry(true); // Add main respondent automatically, mark as non-deletable
         }
         showPage('page2');
     } else {
         showFinalPageForNoAttending();
     }
 }
-
 
 function showFinalPageForNoAttending() {
     document.getElementById('finalPageContent').classList.remove('hidden');
@@ -342,44 +316,57 @@ function showFinalPageForNoAttending() {
     showPage('finalPage');
 }
 
-
 // --- PAGE 2 LOGIC (GUEST ENTRIES) ---
-let guestCounter = 0;
-function addGuestEntry(isMainRespondent = false) {
-    guestCounter++;
+let guestIdCounter = 0; // To ensure unique IDs for guests if needed later, not strictly used now for deletion
+function addGuestEntry(isFirstGuest = false) {
+    guestIdCounter++;
     const template = document.getElementById('guestEntryTemplate').content.cloneNode(true);
     const guestEntryDiv = template.querySelector('.guest-entry');
-    guestEntryDiv.dataset.guestId = guestCounter;
+    // guestEntryDiv.dataset.guestId = guestIdCounter; // If you need to reference by ID
 
+    const removeButton = guestEntryDiv.querySelector('.remove-guest-button');
+    if (isFirstGuest) {
+        removeButton.classList.add('hidden'); // First guest (main respondent) cannot be removed
+    } else {
+        removeButton.classList.remove('hidden');
+    }
+    
     // Translate static text within the template before appending
-    template.querySelectorAll('[data-translate]').forEach(el => {
+    guestEntryDiv.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.dataset.translate;
         if (translations[currentLanguage][key]) {
             el.innerHTML = translations[currentLanguage][key];
         }
     });
-    template.querySelectorAll('[placeholder-translate]').forEach(el => {
+     // Specifically re-translate the Guest H3 title as it's in the template
+    const guestTitleElement = guestEntryDiv.querySelector('h3[data-translate="guestEntryTitle"]');
+    if (guestTitleElement) {
+        guestTitleElement.innerHTML = translations[currentLanguage].guestEntryTitle;
+    }
+
+    guestEntryDiv.querySelectorAll('[placeholder-translate]').forEach(el => {
         const key = el.placeholderTranslate;
         if (translations[currentLanguage][key]) {
             el.placeholder = translations[currentLanguage][key];
         }
     });
 
-    // Set default name if it's the main respondent
-    if (isMainRespondent) {
+    // If it's the first guest (main respondent), prefill their name
+    if (isFirstGuest) {
         const guestNameInput = guestEntryDiv.querySelector('input[name="guestName"]');
         const mainChineseName = document.getElementById('chineseName').value.trim();
         const mainEnglishName = document.getElementById('englishName').value.trim();
+        let prefilledName = "";
         if (mainChineseName && mainEnglishName) {
-             guestNameInput.value = currentLanguage === 'zh' ? mainChineseName + " (" + mainEnglishName + ")" : mainEnglishName + " (" + mainChineseName + ")";
+             prefilledName = currentLanguage === 'zh' ? `${mainChineseName} (${mainEnglishName})` : `${mainEnglishName} (${mainChineseName})`;
         } else {
-            guestNameInput.value = mainChineseName || mainEnglishName;
+            prefilledName = mainChineseName || mainEnglishName;
         }
+        if (guestNameInput) guestNameInput.value = prefilledName;
     }
 
-
-    document.getElementById('guestListContainer').appendChild(template);
-    setLanguage(currentLanguage); // Re-apply language to new elements
+    document.getElementById('guestListContainer').appendChild(guestEntryDiv);
+    // setLanguage(currentLanguage); // Not strictly needed if template is translated before append
 }
 
 function removeGuestEntry(button) {
@@ -394,14 +381,14 @@ function toggleChildOptions(checkbox) {
 function validatePage2() {
     let isValid = true;
     const guestEntries = document.querySelectorAll('#guestListContainer .guest-entry');
-    if (guestEntries.length === 0 && rsvpData.attending === 'yes') {
-        alert(translations[currentLanguage].page2Description); // Remind to add themselves at least
+    if (rsvpData.attending === 'yes' && guestEntries.length === 0) { // Should not happen if first guest is auto-added
+        alert(translations[currentLanguage].page2Description); 
         isValid = false;
     }
-    guestEntries.forEach(entry => {
+    guestEntries.forEach((entry, index) => {
         const nameInput = entry.querySelector('input[name="guestName"]');
         if (!nameInput.value.trim()) {
-            alert(translations[currentLanguage].validationRequired + " (" + translations[currentLanguage].guestNameLabel + ")");
+            alert(`${translations[currentLanguage].validationRequired} (${translations[currentLanguage].guestNameLabel} - ${translations[currentLanguage].guestEntryTitle} ${index + 1})`);
             nameInput.focus();
             isValid = false;
         }
@@ -411,7 +398,6 @@ function validatePage2() {
 
 function validateAndGoToPage3() {
     if (!validatePage2()) return;
-    // Collect guest data
     rsvpData.guests = [];
     document.querySelectorAll('#guestListContainer .guest-entry').forEach(entry => {
         const guest = {
@@ -434,34 +420,40 @@ function toggleContactInput(method) {
     if (inputField) {
         inputField.classList.toggle('hidden', !checkbox.checked);
         if (checkbox.checked) {
-            inputField.required = true;
+            inputField.required = true; // Mark as required for form validation if using HTML5
             inputField.focus();
         } else {
             inputField.required = false;
-            inputField.value = ''; // Clear if unchecked
+            inputField.value = ''; 
         }
     }
 }
+
 function validatePage3() {
     let isValid = true;
-    const contactMethods = document.querySelectorAll('input[name="contactMethod"]:checked');
-    if (contactMethods.length > 0) {
-        contactMethods.forEach(checkbox => {
-            const inputField = document.getElementById(`contact${checkbox.value.charAt(0).toUpperCase() + checkbox.value.slice(1)}Input`);
-            if (!inputField.value.trim()) {
-                alert(translations[currentLanguage].validationContactMethod + ` (${translations[currentLanguage]['contact' + checkbox.value.charAt(0).toUpperCase() + checkbox.value.slice(1)]})`);
-                inputField.focus();
-                isValid = false;
-            }
-        });
+    const contactMethodsChecked = document.querySelectorAll('input[name="contactMethod"]:checked');
+    
+    if (contactMethodsChecked.length === 0) {
+        alert(translations[currentLanguage].validationMinOneContact);
+        return false; // At least one method must be selected
     }
-    // No validation needed if no contact method is chosen, it's optional.
+
+    contactMethodsChecked.forEach(checkbox => {
+        const inputField = document.getElementById(`contact${checkbox.value.charAt(0).toUpperCase() + checkbox.value.slice(1)}Input`);
+        if (!inputField || !inputField.value.trim()) {
+            // Use the translated label for the alert
+            const labelSpan = checkbox.parentElement.querySelector('span[data-translate]');
+            const contactMethodName = labelSpan ? labelSpan.textContent : checkbox.value;
+            alert(`${translations[currentLanguage].validationContactMethod} (${contactMethodName})`);
+            if (inputField) inputField.focus();
+            isValid = false;
+        }
+    });
     return isValid;
 }
 
 function validateAndGoToFinalPage() {
     if (!validatePage3()) return;
-    // Collect contact preferences
     rsvpData.contactPreferences = [];
     document.querySelectorAll('input[name="contactMethod"]:checked').forEach(checkbox => {
         const method = checkbox.value;
@@ -482,11 +474,9 @@ function submitForm() {
     rsvpData.message = document.getElementById('message').value.trim();
     const emailStatusDiv = document.getElementById('emailStatus');
 
-    // Update status message
     emailStatusDiv.textContent = translations[currentLanguage].emailSending;
-    emailStatusDiv.className = 'email-status-message email-sending'; // Reset classes and add sending
+    emailStatusDiv.className = 'email-status-message email-sending'; 
 
-    // --- Construct email parameters ---
     let guestListSummary = "";
     if (rsvpData.attending === 'yes' && rsvpData.guests.length > 0) {
         guestListSummary = "Attending Guests:\n";
@@ -512,11 +502,12 @@ function submitForm() {
             contactPrefSummary += `- ${pref.method}: ${pref.detail}\n`;
         });
     } else {
+        // This case should not be reached if validationMinOneContact works
         contactPrefSummary = "No specific contact preferences selected beyond primary email.\n";
     }
 
     const templateParamsCouple = {
-        guest_side: rsvpData.guestSide === 'groom' ? translations.en.guestSideGroom : translations.en.guestSideBride, // For your email, maybe keep EN
+        guest_side: rsvpData.guestSide === 'groom' ? translations.en.guestSideGroom : translations.en.guestSideBride, 
         chinese_name: rsvpData.chineseName || "N/A",
         english_name: rsvpData.englishName || "N/A",
         user_email: rsvpData.email,
@@ -528,20 +519,16 @@ function submitForm() {
     };
 
     const templateParamsGuest = {
-        to_name: rsvpData.englishName || rsvpData.chineseName, // Use whichever is available for salutation
+        to_name: rsvpData.englishName || rsvpData.chineseName, 
         user_email: rsvpData.email,
         attending_status: rsvpData.attending === 'yes' ? "We're delighted you'll be joining us!" : "We're sorry you can't make it, but thank you for letting us know.",
-        wedding_date: "[Your Wedding Date Here]", // Replace with actual date
-        wedding_location: "[Your Wedding Location Here]" // Replace
+        wedding_date: "[Your Wedding Date Here]", 
+        wedding_location: "[Your Wedding Location Here]" 
     };
 
-    // --- Send Email to Couple ---
-    // REPLACE with your Service ID and Template ID for the email TO YOU
     emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID_FOR_COUPLE', templateParamsCouple)
         .then((response) => {
             console.log('SUCCESS sending email to couple!', response.status, response.text);
-            // --- Send Confirmation Email to Guest ---
-            // REPLACE with your Service ID and Template ID for the email TO GUEST
             return emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID_FOR_GUEST', templateParamsGuest);
         })
         .then((response) => {
@@ -552,7 +539,6 @@ function submitForm() {
             document.getElementById('thankYouMessage').classList.remove('hidden');
             document.getElementById('backToStartButton').classList.remove('hidden');
 
-            // Update thank you message based on attendance
             const thankYouBody = document.querySelector('#thankYouMessage .award-text');
             if(rsvpData.attending === 'yes') {
                 thankYouBody.dataset.translate = "thankYouBodyAttending";
@@ -565,53 +551,55 @@ function submitForm() {
         })
         .catch((error) => {
             console.error('FAILED to send email...', error);
-            emailStatusDiv.textContent = translations[currentLanguage].emailError + " (" + error.text + ")";
+            emailStatusDiv.textContent = translations[currentLanguage].emailError + (error.text ? " (" + error.text + ")" : "");
             emailStatusDiv.className = 'email-status-message email-error';
         });
 }
 
 function resetFormAndGoToStart() {
-    // Reset form elements
-    document.getElementById('rsvpFormContainer').reset(); // Assuming your main form container has this ID, or reset individual forms.
-    // More robust reset:
-    document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(input => input.value = '');
-    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => input.checked = false);
-    document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+    // Simple form reset for inputs within the rsvp-container
+    const rsvpContainer = document.querySelector('.rsvp-container'); // Or specific form ID if you wrap pages in <form>
+    rsvpContainer.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(input => input.value = '');
+    rsvpContainer.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => input.checked = false); // HTML radio buttons don't really reset this way
+    rsvpContainer.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+    
+    // Clear custom selected states for choice buttons
     document.querySelectorAll('.choice-button.selected').forEach(btn => btn.classList.remove('selected'));
-    document.getElementById('guestListContainer').innerHTML = ''; // Clear dynamic guests
+    document.getElementById('guestSide').value = ''; // Clear hidden input
+    document.getElementById('attendance').value = ''; // Clear hidden input
+
+    // Clear dynamically added guests
+    document.getElementById('guestListContainer').innerHTML = ''; 
+    guestIdCounter = 0; // Reset guest counter
+
+    // Hide contact input fields
     document.querySelectorAll('.contact-input').forEach(input => input.classList.add('hidden'));
+    
+    // Reset stars on page 1
+    document.getElementById('chineseNameStar').classList.add('hidden');
+    document.getElementById('englishNameStar').classList.add('hidden');
 
 
     // Reset RSVP data object
     Object.keys(rsvpData).forEach(key => {
         if (Array.isArray(rsvpData[key])) {
             rsvpData[key] = [];
-        } else {
-            delete rsvpData[key];
+        } else if (typeof rsvpData[key] === 'object' && rsvpData[key] !== null) {
+            rsvpData[key] = {};
+        }
+         else {
+            delete rsvpData[key]; // Or set to null/undefined
         }
     });
-    guestCounter = 0;
+    rsvpData.guests = []; // Ensure guests array is reset
 
-
-    // Hide thank you, show first page
-    document.getElementById('finalPageContent').classList.remove('hidden'); // Ensure main content area is visible for next time
+    document.getElementById('finalPageContent').classList.remove('hidden'); 
     document.getElementById('thankYouMessage').classList.add('hidden');
     document.getElementById('backToStartButton').classList.add('hidden');
-    document.getElementById('emailStatus').textContent = ''; // Clear email status
-
-    // Reset button states or onclick handlers if they were changed
-     document.getElementById('nextPage1').onclick = () => validateAndGoToPage2();
+    document.getElementById('emailStatus').textContent = ''; 
+    document.getElementById('emailStatus').className = 'email-status-message';
 
 
-    setLanguage(currentLanguage); // Re-apply language to ensure all defaults are set
+    setLanguage(currentLanguage); 
     showPage('page1');
 }
-
-// Wrap the main container in a form if you want to use form.reset()
-// For this example, will manually reset fields if needed.
-// For now, let's assume the main container has id 'rsvp-container' for easier selection for reset,
-// but a better way is to wrap page1, page2, page3 in a <form> tag.
-// The HTML was updated to reflect this by adding a main form container.
-// The script assumes the rsvp-container is the overall wrapper, not a form element itself.
-// If you add <form id="mainRsvpForm"> around all pages, you can use document.getElementById('mainRsvpForm').reset();
-// For now, the manual reset approach is in resetFormAndGoToStart().
