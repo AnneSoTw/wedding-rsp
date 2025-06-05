@@ -10,11 +10,13 @@
 <body>
 
 <div class="rsvp-container">
-        <div class="language-selector">
-            <button id="langEn" class="lang-button active">English</button>
-            <button id="langZh" class="lang-button">繁體中文</button>
-            <button id="langFr" class="lang-button">Francais</button>
-        </div>
+    <div class="language-selector-dropdown">
+      <select id="languageSelect" class="lang-button">
+        <option value="en" id="langEn">🇺🇸 English</option>
+        <option value="zh" id="langZh">🇹🇼 繁體中文</option>
+        <option value="fr" id="langFr">🇫🇷 Français</option>
+      </select>
+    </div>
 
         <header id="rsvpHeader">
             <h1 class="romantic-font" data-translate="headerTitle">Our Wedding 2</h1>
@@ -62,7 +64,7 @@
                 <input type="hidden" id="attendance" name="attendanceInput">
             </div>
             <div class="navigation-buttons">
-                <button id="nextPage1" class="form-button"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+                <button id="nextPage1" class="form-button" data-translate="nextButton"></button>
             </div>
         </div>
 
@@ -130,8 +132,8 @@
                 <input type="text" id="contactFacebookInput" name="contactFacebookInput" class="contact-input hidden" placeholder-translate="contactFacebookPlaceholder">
             </div>
             <div class="navigation-buttons">
-                <button id="prevToPage2" class="form-button alternate"><span class="lang-zh">上一頁</span><span class="lang-en">Previous</span></button>
-                <button id="nextPage3" class="form-button"><span class="lang-zh">下一步</span><span class="lang-en">Next</span></button>
+                <button id="prevToPage2" class="form-button alternate" data-translate="prevButton"></button>
+                <button id="nextPage3" class="form-button" data-translate="nextButton"></button>
             </div>
         </div>
 
@@ -149,7 +151,7 @@
                     <a href="YOUR_LINE_LINK_HERE" target="_blank" class="line-link" data-translate="lineLinkText">Click here to add us on LINE</a>
                 </div>
                 <div class="navigation-buttons">
-                    <button id="submitRsvp" class="form-button"><span class="lang-zh">送出回覆</span><span class="lang-en">Submit RSVP</span></button>
+                    <button id="submitRsvp" class="form-button" data-translate="submitRsvpButton"></button>
                 </div>
                 <div id="emailStatus" class="email-status-message"></div>
             </div>
@@ -158,9 +160,6 @@
                  <p class="award-text" data-translate="thankYouBody">Your response has been recorded. We look forward to celebrating with you (or will miss you)! A confirmation email has been sent.</p>
                  <img src="https://placehold.co/100x100/fffaf0/a1887f?text=Joy" alt="Thank You" class="award-logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/fffaf0/a1887f?text=Logo';">
                  <p class="save-the-date-text" data-translate="saveTheDate">Save the Date!</p>
-            </div>
-            <div class="navigation-buttons">
-                <button id="backToStartButton" class="form-button alternate hidden"><span class="lang-zh">返回首頁</span><span class="lang-en">Back to Start</span></button>
             </div>
         </div>
     </div>
@@ -199,8 +198,6 @@
                 <select name="mealPreference">
                     <option value="standard" data-translate="mealStandard">Standard (標準)</option>
                     <option value="vegetarian" data-translate="mealVegetarian">Vegetarian (素食)</option>
-                    <option value="vegan" data-translate="mealVegan">Vegan (全素)</option>
-                    <option value="other" data-translate="mealOther">Other (其他 - please specify)</option>
                 </select>
             </div>
             <div class="form-group">
