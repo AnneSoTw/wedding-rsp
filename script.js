@@ -768,19 +768,18 @@ const translations = {
                                   </tr>`;
                 });
                 emailBody += `</tbody></table>`;
-            }
-
-            emailBody += `<h3>Contact & Shipping Information:</h3><ul>`;
-            emailBody += `<li><strong>Phone:</strong> ${rsvpData.contactPreferences.phone || 'N/A'}</li>`;
-            emailBody += `<li><strong>Email Contact:</strong> ${rsvpData.contactPreferences.email || 'N/A'}</li>`;
-            emailBody += `<li><strong>Line:</strong> ${rsvpData.contactPreferences.line || 'N/A'}</li>`;
-            emailBody += `<li><strong>WhatsApp:</strong> ${rsvpData.contactPreferences.whatsapp || 'N/A'}</li>`;
-            emailBody += `<li><strong>Instagram:</strong> ${rsvpData.contactPreferences.ig || 'N/A'}</li>`;
-            emailBody += `<li><strong>Facebook:</strong> ${rsvpData.contactPreferences.facebook || 'N/A'}</li>`;
-            emailBody += `<li><strong>Number of invitation needed:</strong> ${rsvpData.invitationCount}</li>`;
-            emailBody += `<li><strong>Address:</strong> ${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}</li>`;
-            emailBody += `</ul>`;
             
+		    emailBody += `<h3>Contact & Shipping Information:</h3><ul>`;
+		    emailBody += `<li><strong>Phone:</strong> ${rsvpData.contactPreferences.phone || 'N/A'}</li>`;
+		    emailBody += `<li><strong>Email Contact:</strong> ${rsvpData.contactPreferences.email || 'N/A'}</li>`;
+		    emailBody += `<li><strong>Line:</strong> ${rsvpData.contactPreferences.line || 'N/A'}</li>`;
+		    emailBody += `<li><strong>WhatsApp:</strong> ${rsvpData.contactPreferences.whatsapp || 'N/A'}</li>`;
+		    emailBody += `<li><strong>Instagram:</strong> ${rsvpData.contactPreferences.ig || 'N/A'}</li>`;
+		    emailBody += `<li><strong>Facebook:</strong> ${rsvpData.contactPreferences.facebook || 'N/A'}</li>`;
+		    emailBody += `<li><strong>Number of invitation needed:</strong> ${rsvpData.invitationCount}</li>`;
+		    emailBody += `<li><strong>Address:</strong> ${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}</li>`;
+		    emailBody += `</ul>`;
+	    }
             emailBody += `<h3>Other:</h3>`;
             emailBody += `<p>${rsvpData.message || 'No message left.'}</p>`;
             
