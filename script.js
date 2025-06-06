@@ -217,6 +217,11 @@ const translations = {
             }
         };
 
+        // --- EmailJS Configuration ---
+        const EMAILJS_SERVICE_ID = 'service_3qozdwc';
+        const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
+        const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
+
         let currentLanguage = 'en';
         let currentPage = 'page1';
         const rsvpData = {
@@ -273,7 +278,7 @@ const translations = {
             initializeModal(); 
 
             try {
-                emailjs.init("YOUR_USER_PUBLIC_KEY"); 
+                emailjs.init(EMAILJS_PUBLIC_KEY); 
             } catch (e) {
                 console.error("EmailJS initialization failed.", e);
             }
@@ -630,7 +635,22 @@ const translations = {
             }
         }
 
-        function validatePage3() {
+        function validatePage3()
+        {
+            const invitationCount = document.getElementById('invitationCount');
+            const addressStreet = document.getElementById('addressStreet');
+            const addressCode = document.getElementById('addressCode');
+            const addressCity = document.getElementById('addressCity');
+            const addressCountry = document.getElementById('addressCountry');
+
+            if (!invitationCount.value) {
+                showValidationModal(translations[currentLanguage].validationInvitationCount, invitationCount);
+                return false;
+            }
+            if (!addressStreet.value.trim() || !addressCode.value.trim() || !addressCity.value.trim() || !addressCountry.value.trim()) {
+                showValidationModal(translations[currentLanguage].validationAddress, addressStreet);
+                return false;
+            }
             const contactMethodsChecked = document.querySelectorAll('input[name="contactMethod"]:checked');
             if (contactMethodsChecked.length === 0) {
                 showValidationModal(translations[currentLanguage].validationMinOneContact);
@@ -654,6 +674,13 @@ const translations = {
 
         function validateAndGoToFinalPage() {
             if (!validatePage3()) return;
+            rsvpData.invitationCount = document.getElementById('invitationCount').value;
+            rsvpData.address = {
+                street: document.getElementById('addressStreet').value.trim(),
+                code: document.getElementById('addressCode').value.trim(),
+                city: document.getElementById('addressCity').value.trim(),
+                country: document.getElementById('addressCountry').value.trim()
+            };
             rsvpData.contactPreferences = [];
             document.querySelectorAll('input[name="contactMethod"]:checked').forEach(checkbox => {
                 const method = checkbox.value;
@@ -669,66 +696,76 @@ const translations = {
             showPage('finalPage');
         }
 
-        function submitForm() {
+        function submitForm()
+		{
             rsvpData.message = document.getElementById('message').value.trim();
             const emailStatusDiv = document.getElementById('emailStatus');
-
             emailStatusDiv.textContent = translations[currentLanguage].emailSending;
             emailStatusDiv.className = 'email-status-message email-sending'; 
 
-            let guestListSummary = "";
+            let emailBody = `<div style="font-family: Arial, sans-serif; color: #333;">`;
+            
+            emailBody += `<h3>Basic Information:</h3><ul>`;
+            emailBody += `<li><strong>Guest side:</strong> ${rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride'}</li>`;
+            emailBody += `<li><strong>Chinese Name:</strong> ${rsvpData.chineseName || 'N/A'}</li>`;
+            emailBody += `<li><strong>English Name:</strong> ${rsvpData.englishName || 'N/A'}</li>`;
+            emailBody += `<li><strong>Email:</strong> ${rsvpData.email}</li>`;
+            emailBody += `<li><strong>Attend:</strong> ${rsvpData.attending === 'yes' ? 'Yes' : 'No'}</li>`;
+            emailBody += `</ul>`;
+
             if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
-                guestListSummary = "Attending Guests (" + rsvpData.guests.length + " total):\n";
+                emailBody += `<h3>Guest Information:</h3>`;
+                emailBody += `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                                <thead>
+                                    <tr style="background-color: #f2f2f2;">
+                                        <th>Name</th>
+                                        <th>Children?</th>
+                                        <th>Child Seat?</th>
+                                        <th>Child Meal?</th>
+                                        <th>Meal Preference</th>
+                                        <th>Other (Allergies)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
                 rsvpData.guests.forEach(guest => {
-                    guestListSummary += `\n- Name: ${guest.name}`;
-                    if (guest.isChild) {
-                        guestListSummary += " (Child";
-                        if (guest.childSeat) guestListSummary += " - Needs Seat";
-                        if (guest.childMeal) guestListSummary += " - Needs Child Meal";
-                        guestListSummary += ")";
-                    }
-                    guestListSummary += `\n  Meal Preference: ${guest.mealPreference}`;
-                    if (guest.allergies) guestListSummary += `\n  Dietary Restrictions/Allergies: ${guest.allergies}`;
-                    guestListSummary += "\n";
+                    emailBody += `<tr>
+                                    <td>${guest.name}</td>
+                                    <td>${guest.isChild ? 'Yes' : 'No'}</td>
+                                    <td>${guest.childSeat ? 'Yes' : 'No'}</td>
+                                    <td>${guest.childMeal ? 'Yes' : 'No'}</td>
+                                    <td>${guest.mealPreference}</td>
+                                    <td>${guest.allergies || 'N/A'}</td>
+                                  </tr>`;
                 });
-            } else if (rsvpData.attending === 'no') {
-                guestListSummary = "Not attending.";
+                emailBody += `</tbody></table>`;
             }
 
-            let contactPrefSummary = "Contact Preferences:\n";
-            if (rsvpData.contactPreferences && rsvpData.contactPreferences.length > 0) {
-                rsvpData.contactPreferences.forEach(pref => {
-                    contactPrefSummary += `- ${pref.method}: ${pref.detail}\n`;
-                });
-            } else {
-                contactPrefSummary = "No specific contact preferences selected.\n";
-            }
+            emailBody += `<h3>Contact & Shipping Information:</h3><ul>`;
+            emailBody += `<li><strong>Phone:</strong> ${rsvpData.contactPreferences.phone || 'N/A'}</li>`;
+            emailBody += `<li><strong>Email Contact:</strong> ${rsvpData.contactPreferences.email || 'N/A'}</li>`;
+            emailBody += `<li><strong>Line:</strong> ${rsvpData.contactPreferences.line || 'N/A'}</li>`;
+            emailBody += `<li><strong>WhatsApp:</strong> ${rsvpData.contactPreferences.whatsapp || 'N/A'}</li>`;
+            emailBody += `<li><strong>Instagram:</strong> ${rsvpData.contactPreferences.ig || 'N/A'}</li>`;
+            emailBody += `<li><strong>Facebook:</strong> ${rsvpData.contactPreferences.facebook || 'N/A'}</li>`;
+            emailBody += `<li><strong>Number of invitation needed:</strong> ${rsvpData.invitationCount}</li>`;
+            emailBody += `<li><strong>Address:</strong> ${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}</li>`;
+            emailBody += `</ul>`;
+            
+            emailBody += `<h3>Other:</h3>`;
+            emailBody += `<p>${rsvpData.message || 'No message left.'}</p>`;
+            
+            emailBody += `</div>`;
             
             const templateParamsCouple = {
-                guest_side: rsvpData.guestSide ? (rsvpData.guestSide === 'groom' ? translations.en.guestSideGroom : translations.en.guestSideBride) : "N/A", 
-                chinese_name: rsvpData.chineseName || "N/A",
-                english_name: rsvpData.englishName || "N/A",
+                email_body: emailBody, 
                 user_email: rsvpData.email,
-                attending: rsvpData.attending === 'yes' ? "Yes" : "No",
-                guest_details: guestListSummary,
-                contact_preferences: contactPrefSummary,
-                message_to_couple: rsvpData.message || "No message.",
-                submission_time: new Date().toLocaleString()
+                user_name: rsvpData.englishName || rsvpData.chineseName
             };
 
-            const templateParamsGuest = {
-                to_name: rsvpData.englishName || rsvpData.chineseName || "Guest", 
-                user_email: rsvpData.email,
-                attending_status: rsvpData.attending === 'yes' ? translations[currentLanguage].thankYouBodyAttending.split('.')[0] : translations[currentLanguage].thankYouBodyNotAttending.split('.')[0],
-                wedding_date: "[Your Wedding Date Here]", 
-                wedding_location: "[Your Wedding Location Here]" 
-            };
+            const YOUR_SERVICE_ID = ""; 
+            const YOUR_TEMPLATE_ID_FOR_COUPLE = "";
 
-            const YOUR_SERVICE_ID = "YOUR_SERVICE_ID"; 
-            const YOUR_TEMPLATE_ID_FOR_COUPLE = "YOUR_TEMPLATE_ID_FOR_COUPLE";
-            const YOUR_TEMPLATE_ID_FOR_GUEST = "YOUR_TEMPLATE_ID_FOR_GUEST";
-
-            if (YOUR_SERVICE_ID === "YOUR_SERVICE_ID" || YOUR_TEMPLATE_ID_FOR_COUPLE === "YOUR_TEMPLATE_ID_FOR_COUPLE") {
+            if (YOUR_SERVICE_ID === EMAILJS_SERVICE_ID || YOUR_TEMPLATE_ID_FOR_COUPLE === EMAILJS_TEMPLATE_ID) {
                 console.warn("EmailJS Service ID or Template ID not configured.");
                 showValidationModal("Email sending is not configured. Please contact the host.");
                 emailStatusDiv.textContent = "Email sending is not configured.";
@@ -736,6 +773,7 @@ const translations = {
                 
                 document.getElementById('finalPageContent').classList.add('hidden');
                 document.getElementById('thankYouMessage').classList.remove('hidden');
+                document.getElementById('backToStartButton').classList.remove('hidden');
                 updateThankYouMessage();
                 return;
             }
@@ -743,20 +781,11 @@ const translations = {
             emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID_FOR_COUPLE, templateParamsCouple)
                 .then((response) => {
                     console.log('SUCCESS sending email to couple!', response.status, response.text);
-                    if (YOUR_TEMPLATE_ID_FOR_GUEST !== "YOUR_TEMPLATE_ID_FOR_GUEST") { 
-                       return emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID_FOR_GUEST, templateParamsGuest);
-                    } else {
-                        console.warn("Guest confirmation email template not configured.");
-                        return Promise.resolve({status: "Guest template N/A", text: "Guest email not sent"}); 
-                    }
-                })
-                .then((response) => {
-                    console.log('Guest confirmation status:', response.status, response.text);
                     emailStatusDiv.textContent = translations[currentLanguage].emailSuccess;
                     emailStatusDiv.className = 'email-status-message email-success';
-                    
                     document.getElementById('finalPageContent').classList.add('hidden');
                     document.getElementById('thankYouMessage').classList.remove('hidden');
+                    document.getElementById('backToStartButton').classList.remove('hidden');
                     updateThankYouMessage();
                 })
                 .catch((error) => {
