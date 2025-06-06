@@ -711,14 +711,12 @@ const translations = {
                 city: document.getElementById('addressCity').value.trim(),
                 country: document.getElementById('addressCountry').value.trim()
             };
-            rsvpData.contactPreferences = [];
+
+	    rsvpData.contactPreferences = {};
             document.querySelectorAll('input[name="contactMethod"]:checked').forEach(checkbox => {
                 const method = checkbox.value;
                 const inputField = document.getElementById(`contact${method.charAt(0).toUpperCase() + method.slice(1)}Input`);
-                rsvpData.contactPreferences.push({
-                    method: method,
-                    detail: inputField.value.trim()
-                });
+                rsvpData.contactPreferences[method] = inputField.value.trim();
             });
             
             document.getElementById('finalPageContent').classList.remove('hidden');
