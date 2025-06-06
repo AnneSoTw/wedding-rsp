@@ -785,11 +785,16 @@ const translations = {
             
             emailBody += `</div>`;
             
-            const templateParamsCouple = {
+   
+	   const templateParamsCouple = {
                 email_body: emailBody, 
-                user_email: rsvpData.email,
+                // This 'email' parameter is for the 'To' field in EmailJS.
+                email: rsvpData.email,
+                // This 'emailAS' is for the 'CC' field. Replace the value with your actual email.
+                emailAS: "hubault.anne-so@hotmail.fr", 
                 user_name: rsvpData.englishName || rsvpData.chineseName
             };
+
 
             const YOUR_SERVICE_ID = ""; 
             const YOUR_TEMPLATE_ID_FOR_COUPLE = "";
