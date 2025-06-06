@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="rsvp-container">
-    <div class="language-selector">
-        <button id="langEn" class="lang-button active">English</button>
-        <button id="langZh" class="lang-button">繁體中文</button>
-        <button id="langFr" class="lang-button">Francais</button>
-    </div>
+ <div class="rsvp-container">
+        <header id="rsvpHeader">
+            <img src="https://placehold.co/800x600/a1887f/ffffff?text=+" alt="Couple" id="weddingImage" onerror="this.onerror=null;this.src='https://placehold.co/800x600/a1887f/ffffff?text=Image+Not+Found';">
+            <div class="header-content">
+                <div class="language-selector">
+                    <button id="langEn" class="lang-button active">English</button>
+                    <button id="langZh" class="lang-button">繁體中文</button>
+                    <button id="langFr" class="lang-button">Francais</button>
+                </div>
 
         <header id="rsvpHeader">
-            <h1 class="romantic-font" data-translate="headerTitle">Our Wedding 2</h1>
-            <img src="https://placehold.co/300x200/f5f0e8/5d4037?text=Our+Photo" alt="Couple" id="weddingImage" class="wedding-image" onerror="this.onerror=null;this.src='https://placehold.co/300x200/f5f0e8/5d4037?text=Image+Not+Found';">
+            <h1 class="romantic-font" data-translate="headerTitle">Our Wedding</h1>
             <p data-translate="headerDescription">Join us to celebrate our special day! Please RSVP by [Your RSVP Date].</p>
         </header>
-
+        <div class="main-content">
         <!-- Page 1: Initial Info -->
         <div id="page1" class="form-page">
             <h2 data-translate="page1Title">Guest Information</h2>
@@ -85,8 +86,40 @@
 
         <!-- Page 3: Contact Preferences -->
         <div id="page3" class="form-page hidden">
-            <h2 data-translate="page3Title">Contact Preferences</h2>
-            <p data-translate="page3Description">How do you prefer we contact you for updates? (At least one method required)</p>
+             <h2 data-translate="page3Title">Details for Invitation</h2>
+                
+                <h3 class="section-title" data-translate="shippingTitle">Shipping Information</h3>
+                <div class="form-group">
+                    <label for="invitationCount" data-translate="invitationCountLabel">How many invitations do you need? <span class="required-star">*</span></label>
+                    <select id="invitationCount" name="invitationCount">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="addressStreet" data-translate="addressStreetLabel">Street Address <span class="required-star">*</span></label>
+                    <input type="text" id="addressStreet" name="addressStreet">
+                </div>
+                <div class="form-group">
+                    <label for="addressCode" data-translate="addressCodeLabel">Postal Code <span class="required-star">*</span></label>
+                    <input type="text" id="addressCode" name="addressCode">
+                </div>
+                <div class="form-group">
+                    <label for="addressCity" data-translate="addressCityLabel">City <span class="required-star">*</span></label>
+                    <input type="text" id="addressCity" name="addressCity">
+                </div>
+                <div class="form-group">
+                    <label for="addressCountry" data-translate="addressCountryLabel">Country <span class="required-star">*</span></label>
+                    <input type="text" id="addressCountry" name="addressCountry">
+                </div>
+                
+                <hr class="form-divider">
+
+                <h3 class="section-title" data-translate="contactTitle">Contact Preferences</h3>
+            <p data-translate="page3Description">How do you prefer we contact you for updates? (At least one required)</p>
             <div class="form-group">
                 <label class="checkbox-label">
                     <input type="checkbox" name="contactMethod" value="phone">
@@ -161,7 +194,7 @@
             </div>
         </div>
     </div>
-
+    </div>
     <!-- Guest Entry Template (for Page 2) -->
     <template id="guestEntryTemplate">
         <div class="guest-entry">
