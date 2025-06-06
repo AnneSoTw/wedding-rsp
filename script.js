@@ -807,7 +807,6 @@ const translations = {
                 
                 document.getElementById('finalPageContent').classList.add('hidden');
                 document.getElementById('thankYouMessage').classList.remove('hidden');
-                document.getElementById('backToStartButton').classList.remove('hidden');
                 updateThankYouMessage();
                 return;
             }
@@ -819,7 +818,6 @@ const translations = {
                     emailStatusDiv.className = 'email-status-message email-success';
                     document.getElementById('finalPageContent').classList.add('hidden');
                     document.getElementById('thankYouMessage').classList.remove('hidden');
-                    document.getElementById('backToStartButton').classList.remove('hidden');
                     updateThankYouMessage();
                 })
                 .catch((error) => {
