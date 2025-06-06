@@ -1,4 +1,4 @@
-body {
+ body {
             font-family: 'Merriweather', 'Noto Sans TC', serif;
             background: linear-gradient(to bottom, #f5f0e8, #e6dacb);
             display: flex;
@@ -15,65 +15,91 @@ body {
             background-color: #ffffff;
             border-radius: 1rem;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 2rem 2.5rem; 
             width: 100%;
             max-width: 700px; 
             text-align: center;
             border: 1px solid #d7ccc8;
+            overflow: hidden; /* This is crucial to contain the absolute positioned header image */
+        }
+        
+        /* -- HEADER STYLES -- */
+        #rsvpHeader {
+            position: relative; /* Positioning context for the image and content */
+            padding: 2rem 1.5rem 1.5rem 1.5rem; /* Padding for the content inside */
+            margin: -1px -1px 0 -1px; /* Overlap the container border slightly */
+            margin-bottom: 2rem;
+            min-height: 250px; /* Give header some space */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white; /* Default text color for header content */
+        }
+        
+        #weddingImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures image covers the header area */
+            opacity: 0.5; /* Opacity for text readability */
+            z-index: 1; /* Behind the content */
         }
 
+        .header-content {
+            position: relative;
+            z-index: 2; /* In front of the image */
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6); /* Readability shadow */
+        }
+        
+        /* Language buttons styling */
         .language-selector {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
-
-.language-selector select {
-  font-size: 14px;
-  padding: 5px 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: white;
-  cursor: pointer;
-  min-width: 130px;
-}
 
         .lang-button {
             font-family: 'Merriweather', 'Noto Sans TC', serif;
-            background-color: #f0eade;
-            color: #5d4037;
-            border: 1px solid #d7ccc8;
+            background-color: #f0eade; /* Opaque light beige */
+            color: #5d4037; /* Brown text */
+            border: 1px solid #d7ccc8; /* Light border */
             padding: 0.5rem 1rem;
             margin-left: 0.5rem;
-            border-radius: 0.5rem;
+            border-radius: 2rem; /* "Round" shape */
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+            text-shadow: none; /* Remove header's text shadow from buttons */
         }
 
         .lang-button.active,
         .lang-button:hover {
-            background-color: #d4af37;
+            background-color: #d4af37; /* Gold active/hover color */
             color: white;
-        }
-
-        #rsvpHeader {
-            margin-bottom: 2rem;
-        }
-
-        .wedding-image {
-            max-width: 200px; 
-            height: auto;
-            border-radius: 0.75rem;
-            margin: 1rem auto;
-            display: block;
+            border-color: #c09b2d;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
         }
 
-        .romantic-font {
-            font-family: 'Dancing Script', 'Noto Sans TC', cursive;
-            color: #8d6e63;
-            font-size: 2.8rem; 
-            margin-bottom: 0.5rem;
+        /* Adjust title for the new header background */
+        .header-content .romantic-font {
+            color: white; /* Override the default brown color */
+            margin-bottom: 0;
+        }
+
+        /* Adjust description for the new header background */
+        #rsvpHeader > p {
+            position: relative;
+            z-index: 2;
+            color: #5d4037; /* Reset to default text color as it's outside the overlay part */
+            margin-top: 2rem;
+            padding: 0 1rem; /* Give it some horizontal padding */
+            text-shadow: none;
+        }
+        
+        .main-content {
+            padding: 0 2.5rem 2rem 2.5rem; /* Main content area padding */
         }
 
         .lang-zh {
@@ -83,10 +109,6 @@ body {
             font-family: 'Noto Sans TC', sans-serif;
         }
         .lang-en {
-            display: block;
-            font-size: 0.9em;
-        }
-        .lang-fr {
             display: block;
             font-size: 0.9em;
         }
@@ -101,6 +123,16 @@ body {
             color: #8d6e63;
             font-family: 'Merriweather', 'Noto Sans TC', serif;
             margin-bottom: 1.5rem;
+        }
+        
+        .form-page h3.section-title {
+            text-align: center;
+            color: #a1887f;
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 0.5rem;
         }
 
         .form-group {
@@ -183,7 +215,6 @@ body {
         }
         .choice-button .lang-zh { color: inherit; font-weight: bold; }
         .choice-button .lang-en { font-size: 0.9em; color: inherit; }
-        .choice-button .lang-fr { font-size: 0.9em; color: inherit; }
 
 
         .checkbox-label {
@@ -229,7 +260,6 @@ body {
         }
         .form-button .lang-zh { margin-bottom: 0.1rem; color: white; }
         .form-button .lang-en { font-size: 0.8em; color: white; }
-        .form-button .lang-fr { font-size: 0.8em; color: white; }
 
         .form-button:hover {
             transform: translateY(-2px);
@@ -303,6 +333,12 @@ body {
             border-left: 2px solid #e0e0e0;
         }
 
+        hr.form-divider {
+            border: 0;
+            height: 1px;
+            background-color: #d7ccc8;
+            margin: 2.5rem auto;
+        }
         hr.guest-divider {
             border: 0;
             height: 1px;
@@ -351,7 +387,7 @@ body {
             color: #795548; font-size: 1rem; line-height: 1.7;
             margin-bottom: 1.5rem;
         }
-        .award-text .lang-zh, .award-text .lang-en .lang-fr { color: inherit; }
+        .award-text .lang-zh, .award-text .lang-en { color: inherit; }
         .award-logo {
             display: block; width: 100px; height: 100px; 
             margin: 1.5rem auto 1rem auto; border-radius: 0.25rem;
@@ -361,7 +397,7 @@ body {
             margin-top: 0.75rem; font-size: 0.9rem; color: #a1887f;
             font-weight: bold; line-height: 1.4;
         }
-        .save-the-date-text .lang-zh, .save-the-date-text .lang-en .lang-fr { color: inherit; }
+        .save-the-date-text .lang-zh, .save-the-date-text .lang-en { color: inherit; }
 
         .hidden {
             display: none !important; 
@@ -420,20 +456,23 @@ body {
             display: inline-block; 
             margin-top: 0.5rem; 
         }
-        /* These spans are now added by JS for the modal button */
         .modal-button-confirm .lang-zh { color: white; display: block; margin-bottom: 0.1rem; }
         .modal-button-confirm .lang-en { font-size: 0.8em; color: white; display: block; }
-.modal-button-confirm .lang-fr { font-size: 0.8em; color: white; display: block; }
-
 
         .modal-button-confirm:hover {
             background-color: #795548; 
         }
 
-
         @media (max-width: 600px) {
             .rsvp-container {
-                padding: 1.5rem;
+                padding: 0; 
+            }
+            .main-content {
+                padding: 0 1.5rem 1.5rem 1.5rem; 
+            }
+            #rsvpHeader {
+                padding: 1.5rem 1rem 1rem 1rem;
+                min-height: 200px;
             }
             .romantic-font {
                 font-size: 2.2rem;
