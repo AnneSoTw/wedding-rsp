@@ -808,7 +808,7 @@ const translations = {
                 return;
             }
 
-            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID_FOR_COUPLE, templateParamsCouple)
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParamsCouple)
                 .then((response) => {
                     console.log('SUCCESS sending email to couple!', response.status, response.text);
                     emailStatusDiv.textContent = translations[currentLanguage].emailSuccess;
