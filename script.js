@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding",
+                headerTitle: "Our Wedding1",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -252,7 +252,7 @@ const translations = {
         const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
         const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
 
-	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6E1xJwAGMpQEMXKgORYG9lbYhNihLJDnIcdiHkkhRKpNjCtxCFFCG4I_6o26nPGma4Q/exec'
+	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybqrKf3VwCrZkZl1H9dpJuYH58BVqfAivR79t6xCmKZgFddftxqS3i4np11XdUolZ0lQ/exec'
 
         let currentLanguage = 'en';
         let currentPage = 'page1';
