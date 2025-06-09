@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding",
+                headerTitle: "Our Wedding1",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -798,16 +798,18 @@ const translations = {
 
 		 // --- Start of Google Sheet Data Preparation ---
 		    let guestDetailsForSheet = "";
-		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
+		let contactMethodsForSheet = [];
+		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0)
+		    {
 		        rsvpData.guests.forEach(guest => {
 		            let details = `Name: ${guest.name}, Child: ${guest.isChild ? 'Yes' : 'No'}, Seat: ${guest.childSeat ? 'Yes' : 'No'}, Meal: ${guest.childMeal ? 'Yes' : 'No'}, Pref: ${guest.mealPreference}, Allergies: ${guest.allergies || 'N/A'}`;
 		            guestDetailsForSheet += details + " | "; // Use a separator for multiple guests
 		        });
-		    }
-		
-		    const contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
+
+			contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
 		                                         .map(([key, value]) => `${key}: ${value}`)
 		                                         .join(', ');
+		    }
 		
 		    const sheetData = {
 		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
@@ -816,7 +818,7 @@ const translations = {
 		        email: rsvpData.email,
 		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
 		        invitationCount: rsvpData.invitationCount,
-		        address: `${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}`,
+		        address: `${rsvpData.address?.street}, ${rsvpData.address?.city}, ${rsvpData.address?.code}, ${rsvpData.address?.country}`,
 		        contactMethods: contactMethodsForSheet,
 		        message: rsvpData.message || 'N/A',
 		        guestDetails: guestDetailsForSheet.slice(0, -3) // Remove trailing separator
