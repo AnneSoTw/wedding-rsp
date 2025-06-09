@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding1",
+                headerTitle: "Our Wedding",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -252,7 +252,7 @@ const translations = {
         const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
         const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
 
-	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwg2VZy3LvYqrjyn4v_DpZ2LoRlYu1XdjtJz_kbG7BNd2dx5LU2_08IsSFVZmXakwYWLg/exec'
+	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6E1xJwAGMpQEMXKgORYG9lbYhNihLJDnIcdiHkkhRKpNjCtxCFFCG4I_6o26nPGma4Q/exec'
 
         let currentLanguage = 'en';
         let currentPage = 'page1';
@@ -800,25 +800,24 @@ const translations = {
 		    const sheetData =
 		    {
 		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
-		        mainChineseName: rsvpData.chineseName || 'N/A',
-		        mainEnglishName: rsvpData.englishName || 'N/A',
-		        mainEmail: rsvpData.email,
+		        chineseName: rsvpData.chineseName || 'N/A',
+		        englishName: rsvpData.englishName || 'N/A',
+		        email: rsvpData.email,
 		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
-		        invitationCount: rsvpData.invitationCount,
-		        address: `${rsvpData.address?.street}, ${rsvpData.address?.city}, ${rsvpData.address?.code}, ${rsvpData.address?.country}`,
-		        contactMethods: rsvpData.attending === 'yes' 
-						? Object.entries(rsvpData.contactPreferences)
-		                                         .map(([key, value]) => `${key}: ${value}`)
-		                                         .join(', ')
-						: '',
+		        invitation: rsvpData.invitationCount,
+		        address: `${rsvpData.address?.street}, ${rsvpData.address?.code}, ${rsvpData.address?.city}, ${rsvpData.address?.country}`,
+		        contactMethod: rsvpData.attending === 'yes' 
+					? Object.entries(rsvpData.contactPreferences)
+		                                .map(([key, value]) => `${key}: ${value}`)
+		                        	.join('\n')
+					: '',
 		        message: rsvpData.message || 'N/A',
 		        guests: rsvpData.guests.map(g => ({ name: g.name,
+							    mealPreference: g.mealPreference,
+					                    allergies: g.allergies,
 					                    isChild: g.isChild,
 					                    needsSeat: g.childSeat,
-					                    needsMeal: g.childMeal,
-					                    mealPreference: g.mealPreference,
-					                    allergies: g.allergies
-					                }))
+					                    needsMeal: g.childMeal}))
 		    };
 
 	            fetch(APPS_SCRIPT_URL, 
