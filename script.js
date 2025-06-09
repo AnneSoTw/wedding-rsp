@@ -252,6 +252,8 @@ const translations = {
         const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
         const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
 
+	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySyRmu4wS_XxbDFO0gLw4REs82nfAHsDO6cP_wqTi07ZRZMhRW1NY1XnUiEwJm5q540Q/exec'
+
         let currentLanguage = 'en';
         let currentPage = 'page1';
         const rsvpData = {
@@ -725,7 +727,7 @@ const translations = {
         }
 
         function submitForm()
-		{
+	{
             rsvpData.message = document.getElementById('message').value.trim();
             const emailStatusDiv = document.getElementById('emailStatus');
             emailStatusDiv.textContent = translations[currentLanguage].emailSending;
@@ -824,6 +826,44 @@ const translations = {
                     emailStatusDiv.textContent = translations[currentLanguage].emailError;
                     emailStatusDiv.className = 'email-status-message email-error';
                 });
+
+		 // --- Start of Google Sheet Data Preparation ---
+		    let guestDetailsForSheet = "";
+		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
+		        rsvpData.guests.forEach(guest => {
+		            let details = `Name: ${guest.name}, Child: ${guest.isChild ? 'Yes' : 'No'}, Seat: ${guest.childSeat ? 'Yes' : 'No'}, Meal: ${guest.childMeal ? 'Yes' : 'No'}, Pref: ${guest.mealPreference}, Allergies: ${guest.allergies || 'N/A'}`;
+		            guestDetailsForSheet += details + " | "; // Use a separator for multiple guests
+		        });
+		    }
+		
+		    const contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
+		                                         .map(([key, value]) => `${key}: ${value}`)
+		                                         .join(', ');
+		
+		    const sheetData = {
+		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
+		        chineseName: rsvpData.chineseName || 'N/A',
+		        englishName: rsvpData.englishName || 'N/A',
+		        email: rsvpData.email,
+		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
+		        invitationCount: rsvpData.invitationCount,
+		        address: `${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}`,
+		        contactMethods: contactMethodsForSheet,
+		        message: rsvpData.message || 'N/A',
+		        guestDetails: guestDetailsForSheet.slice(0, -3) // Remove trailing separator
+		    };
+
+		 	const scriptURL = APPS_SCRIPT_URL; 
+
+	            return fetch(scriptURL, {
+	                method: 'POST',
+	                mode: 'no-cors', 
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                },
+	                body: JSON.stringify(sheetData)
+	            });
+		    // --- End of Google Sheet Data Preparation ---
         }
         
         function updateThankYouMessage() {
