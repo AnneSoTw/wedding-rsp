@@ -139,6 +139,14 @@
             margin-bottom: 1.25rem;
         }
 
+       .address-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .address-row > .form-group {
+            flex: 1; /* Each group will take up equal space */
+        }
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
@@ -505,5 +513,9 @@
             .modal-button-confirm {
                 padding: 0.6rem 1.2rem;
                 font-size: 0.85rem;
+            }
+            .address-row {
+                flex-direction: column;
+                gap: 0; /* Remove gap, .form-group margin will handle spacing */
             }
         }
