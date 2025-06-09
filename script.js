@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding1",
+                headerTitle: "Our Wedding",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -796,6 +796,44 @@ const translations = {
             };
 
 
+		 // --- Start of Google Sheet Data Preparation ---
+		    let guestDetailsForSheet = "";
+		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
+		        rsvpData.guests.forEach(guest => {
+		            let details = `Name: ${guest.name}, Child: ${guest.isChild ? 'Yes' : 'No'}, Seat: ${guest.childSeat ? 'Yes' : 'No'}, Meal: ${guest.childMeal ? 'Yes' : 'No'}, Pref: ${guest.mealPreference}, Allergies: ${guest.allergies || 'N/A'}`;
+		            guestDetailsForSheet += details + " | "; // Use a separator for multiple guests
+		        });
+		    }
+		
+		    const contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
+		                                         .map(([key, value]) => `${key}: ${value}`)
+		                                         .join(', ');
+		
+		    const sheetData = {
+		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
+		        chineseName: rsvpData.chineseName || 'N/A',
+		        englishName: rsvpData.englishName || 'N/A',
+		        email: rsvpData.email,
+		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
+		        invitationCount: rsvpData.invitationCount,
+		        address: `${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}`,
+		        contactMethods: contactMethodsForSheet,
+		        message: rsvpData.message || 'N/A',
+		        guestDetails: guestDetailsForSheet.slice(0, -3) // Remove trailing separator
+		    };
+
+	            fetch(APPS_SCRIPT_URL, 
+		    {
+	                method: 'POST',
+	                mode: 'no-cors', 
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                },
+	                body: JSON.stringify(sheetData)
+	            })
+		    .catch(err => alert("Something went wrong!"));
+		    // --- End of Google Sheet Data Preparation ---
+		
             const YOUR_SERVICE_ID = ""; 
             const YOUR_TEMPLATE_ID_FOR_COUPLE = "";
 
@@ -827,43 +865,7 @@ const translations = {
                     emailStatusDiv.className = 'email-status-message email-error';
                 });
 
-		 // --- Start of Google Sheet Data Preparation ---
-		    let guestDetailsForSheet = "";
-		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
-		        rsvpData.guests.forEach(guest => {
-		            let details = `Name: ${guest.name}, Child: ${guest.isChild ? 'Yes' : 'No'}, Seat: ${guest.childSeat ? 'Yes' : 'No'}, Meal: ${guest.childMeal ? 'Yes' : 'No'}, Pref: ${guest.mealPreference}, Allergies: ${guest.allergies || 'N/A'}`;
-		            guestDetailsForSheet += details + " | "; // Use a separator for multiple guests
-		        });
-		    }
 		
-		    const contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
-		                                         .map(([key, value]) => `${key}: ${value}`)
-		                                         .join(', ');
-		
-		    const sheetData = {
-		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
-		        chineseName: rsvpData.chineseName || 'N/A',
-		        englishName: rsvpData.englishName || 'N/A',
-		        email: rsvpData.email,
-		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
-		        invitationCount: rsvpData.invitationCount,
-		        address: `${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}`,
-		        contactMethods: contactMethodsForSheet,
-		        message: rsvpData.message || 'N/A',
-		        guestDetails: guestDetailsForSheet.slice(0, -3) // Remove trailing separator
-		    };
-
-		 	const scriptURL = APPS_SCRIPT_URL; 
-
-	            return fetch(scriptURL, {
-	                method: 'POST',
-	                mode: 'no-cors', 
-	                headers: {
-	                    'Content-Type': 'application/json',
-	                },
-	                body: JSON.stringify(sheetData)
-	            });
-		    // --- End of Google Sheet Data Preparation ---
         }
         
         function updateThankYouMessage() {
