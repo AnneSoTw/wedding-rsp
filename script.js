@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding1",
+                headerTitle: "Our Wedding",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -518,11 +518,17 @@ const translations = {
             const clone = template.content.cloneNode(true);
             const guestEntryDiv = clone.querySelector('.guest-entry');
             const removeButton = guestEntryDiv.querySelector('.remove-guest-button');
+	    const isChildButton = guestEntryDiv.querySelector('.is-child-button');
             
-            if (isFirstGuest) {
+            if (isFirstGuest) 
+	    {
                 removeButton.classList.add('hidden'); 
-            } else {
+		isChildButton.classList.add('hidden'); 
+            }
+	    else
+	    {
                 removeButton.classList.remove('hidden');
+	        isChildButton.classList.remove('hidden');
                 removeButton.addEventListener('click', (e) => removeGuestEntry(e.currentTarget));
             }
             
