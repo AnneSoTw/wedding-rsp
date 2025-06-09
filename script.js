@@ -1,6 +1,6 @@
 const translations = {
             en: {
-                headerTitle: "Our Wedding1",
+                headerTitle: "Our Wedding",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
                 guestSideLabel: "Are you a guest of the:",
@@ -252,7 +252,7 @@ const translations = {
         const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
         const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
 
-	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySyRmu4wS_XxbDFO0gLw4REs82nfAHsDO6cP_wqTi07ZRZMhRW1NY1XnUiEwJm5q540Q/exec'
+	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEHMNqViXifky4xRA01Xn4tOLXgq_jTrcU5aT5CKVNAJsaQI3TU8sD4et3yC_ht5awCA/exec'
 
         let currentLanguage = 'en';
         let currentPage = 'page1';
@@ -833,7 +833,8 @@ const translations = {
 	                },
 	                body: JSON.stringify(sheetData)
 	            })
-		    .catch(err => alert("Something went wrong!"));
+		    .then(res => console.log("Thank you! Your score has been recorded."))
+		    .catch(err => console.log("Something went wrong!"));
 		    // --- End of Google Sheet Data Preparation ---
 		
             const YOUR_SERVICE_ID = ""; 
