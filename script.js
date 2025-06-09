@@ -796,32 +796,29 @@ const translations = {
             };
 
 
-		 // --- Start of Google Sheet Data Preparation ---
-		    let guestDetailsForSheet = "";
-		let contactMethodsForSheet = [];
-		    if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0)
+		 // --- Start of Google Sheet Data Preparation ---	
+		    const sheetData =
 		    {
-		        rsvpData.guests.forEach(guest => {
-		            let details = `Name: ${guest.name}, Child: ${guest.isChild ? 'Yes' : 'No'}, Seat: ${guest.childSeat ? 'Yes' : 'No'}, Meal: ${guest.childMeal ? 'Yes' : 'No'}, Pref: ${guest.mealPreference}, Allergies: ${guest.allergies || 'N/A'}`;
-		            guestDetailsForSheet += details + " | "; // Use a separator for multiple guests
-		        });
-
-			contactMethodsForSheet = Object.entries(rsvpData.contactPreferences)
-		                                         .map(([key, value]) => `${key}: ${value}`)
-		                                         .join(', ');
-		    }
-		
-		    const sheetData = {
 		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
-		        chineseName: rsvpData.chineseName || 'N/A',
-		        englishName: rsvpData.englishName || 'N/A',
-		        email: rsvpData.email,
+		        mainChineseName: rsvpData.chineseName || 'N/A',
+		        mainEnglishName: rsvpData.englishName || 'N/A',
+		        mainEmail: rsvpData.email,
 		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
 		        invitationCount: rsvpData.invitationCount,
 		        address: `${rsvpData.address?.street}, ${rsvpData.address?.city}, ${rsvpData.address?.code}, ${rsvpData.address?.country}`,
-		        contactMethods: contactMethodsForSheet,
+		        contactMethods: rsvpData.attending === 'yes' 
+						? Object.entries(rsvpData.contactPreferences)
+		                                         .map(([key, value]) => `${key}: ${value}`)
+		                                         .join(', ')
+						: '',
 		        message: rsvpData.message || 'N/A',
-		        guestDetails: guestDetailsForSheet.slice(0, -3) // Remove trailing separator
+		        guests: rsvpData.guests.map(g => ({ name: g.name,
+					                    isChild: g.isChild,
+					                    needsSeat: g.childSeat,
+					                    needsMeal: g.childMeal,
+					                    mealPreference: g.mealPreference,
+					                    allergies: g.allergies
+					                }))
 		    };
 
 	            fetch(APPS_SCRIPT_URL, 
@@ -833,7 +830,7 @@ const translations = {
 	                },
 	                body: JSON.stringify(sheetData)
 	            })
-		    .then(res => console.log("Thank you! Your score has been recorded."))
+		    .then(res => console.log("Thank you! Your response has been saved."))
 		    .catch(err => console.log("Something went wrong!"));
 		    // --- End of Google Sheet Data Preparation ---
 		
