@@ -76,7 +76,7 @@ const translations =
                 validationChineseNameRequired: "Chinese name is required for Groom's side.",
                 validationEnglishNameRequired: "English name is required for Bride's side.",
                 validationGuestNameRequired: "Guest name is required.",
-				validationInvitationCount: "Please select the number of invitations needed.",
+		validationInvitationCount: "Please select the number of invitations needed.",
                 validationAddress: "Please complete all address fields.",
                 validationContactMethod: "Please provide details for the selected contact method",
                 validationMinOneContact: "Please select and provide details for at least one contact method.", 
@@ -158,7 +158,7 @@ const translations =
                 validationChineseNameRequired: "新郎親友需填寫中文姓名。",
                 validationEnglishNameRequired: "新娘親友需填寫英文姓名。",
                 validationGuestNameRequired: "賓客姓名為必填。",
-				validationInvitationCount: "請選擇所需喜帖數量。",
+		validationInvitationCount: "請選擇所需喜帖數量。",
                 validationAddress: "請填寫完整的地址資訊。",
                 validationContactMethod: "請為已選的聯絡方式提供詳細資料",
                 validationMinOneContact: "請至少選擇並填寫一種聯絡方式。",
@@ -240,7 +240,7 @@ const translations =
                 validationChineseNameRequired: "Chinese name is required for Groom's side.",
                 validationEnglishNameRequired: "English name is required for Bride's side.",
                 validationGuestNameRequired: "Guest name is required.",
-				validationInvitationCount: "Please select the number of invitations needed.",
+		validationInvitationCount: "Please select the number of invitations needed.",
                 validationAddress: "Please complete all address fields.",
                 validationContactMethod: "Please provide details for the selected contact method",
                 validationMinOneContact: "Please select and provide details for at least one contact method.", 
@@ -277,7 +277,7 @@ function initializeModal()
 }
 
 function showValidationModal(	message,
-								elementToFocus = null)
+				elementToFocus = null)
 {
 	focusedElementOnError = elementToFocus; 
 	if (validationModalMessage 
