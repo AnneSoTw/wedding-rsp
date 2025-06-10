@@ -1,5 +1,6 @@
-const translations = {
-            en: {
+const translations =
+{
+	en: {
                 headerTitle: "Our Wedding",
                 headerDescription: "Join us to celebrate our special day! Please RSVP by [Your RSVP Date Here].",
                 page1Title: "Guest Information",
@@ -75,13 +76,13 @@ const translations = {
                 validationChineseNameRequired: "Chinese name is required for Groom's side.",
                 validationEnglishNameRequired: "English name is required for Bride's side.",
                 validationGuestNameRequired: "Guest name is required.",
-		validationInvitationCount: "Please select the number of invitations needed.",
+				validationInvitationCount: "Please select the number of invitations needed.",
                 validationAddress: "Please complete all address fields.",
                 validationContactMethod: "Please provide details for the selected contact method",
                 validationMinOneContact: "Please select and provide details for at least one contact method.", 
                 backToStart: "Back to Start"
             },
-            zh: { // Note: modalOkButton combines both languages. CSS will hide one.
+	zh: { 
                 headerTitle: "我們的婚禮",
                 headerDescription: "誠摯邀請您參與我們的婚禮！請於 [您的回覆截止日期] 前回覆。",
                 page1Title: "賓客資訊",
@@ -157,13 +158,13 @@ const translations = {
                 validationChineseNameRequired: "新郎親友需填寫中文姓名。",
                 validationEnglishNameRequired: "新娘親友需填寫英文姓名。",
                 validationGuestNameRequired: "賓客姓名為必填。",
-		validationInvitationCount: "請選擇所需喜帖數量。",
+				validationInvitationCount: "請選擇所需喜帖數量。",
                 validationAddress: "請填寫完整的地址資訊。",
                 validationContactMethod: "請為已選的聯絡方式提供詳細資料",
                 validationMinOneContact: "請至少選擇並填寫一種聯絡方式。",
                 backToStart: "返回首頁"
             },
-            fr: {
+	fr: {
                 headerTitle: "Notre Mariage",
                 headerDescription: "Joignez nous pour celebrer notre mariage. Repondez avant le.",
                 page1Title: "Information Invitee",
@@ -239,700 +240,860 @@ const translations = {
                 validationChineseNameRequired: "Chinese name is required for Groom's side.",
                 validationEnglishNameRequired: "English name is required for Bride's side.",
                 validationGuestNameRequired: "Guest name is required.",
-		validationInvitationCount: "Please select the number of invitations needed.",
+				validationInvitationCount: "Please select the number of invitations needed.",
                 validationAddress: "Please complete all address fields.",
                 validationContactMethod: "Please provide details for the selected contact method",
                 validationMinOneContact: "Please select and provide details for at least one contact method.", 
                 backToStart: "Back to Start"
             }
-        };
+};
 
-        // --- EmailJS Configuration ---
-        const EMAILJS_SERVICE_ID = 'service_3qozdwc';
-        const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
-        const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
+// --- EmailJS Configuration ---
+const EMAILJS_SERVICE_ID = 'service_3qozdwc';
+const EMAILJS_TEMPLATE_ID = 'template_67lig9l';
+const EMAILJS_PUBLIC_KEY = 'cDxOmMxePGWSWrLPG';
 
-	const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybqrKf3VwCrZkZl1H9dpJuYH58BVqfAivR79t6xCmKZgFddftxqS3i4np11XdUolZ0lQ/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybqrKf3VwCrZkZl1H9dpJuYH58BVqfAivR79t6xCmKZgFddftxqS3i4np11XdUolZ0lQ/exec'
 
-        let currentLanguage = 'en';
-        let currentPage = 'page1';
-        const rsvpData = {
-            guests: []
-        };
-        let focusedElementOnError = null; 
+let currentLanguage = 'en';
+let currentPage = 'page1';
+const rsvpData = {
+	guests: []
+};
+let focusedElementOnError = null; 
 
-        let validationModalOverlay, validationModalMessage, validationModalCloseButton;
+let validationModalOverlay, validationModalMessage, validationModalCloseButton;
 
-        function initializeModal() {
-            validationModalOverlay = document.getElementById('validationModalOverlay');
-            validationModalMessage = document.getElementById('validationModalMessage');
-            validationModalCloseButton = document.getElementById('validationModalCloseButton');
+function initializeModal()
+{
+	validationModalOverlay = document.getElementById('validationModalOverlay');
+	validationModalMessage = document.getElementById('validationModalMessage');
+	validationModalCloseButton = document.getElementById('validationModalCloseButton');
 
-            if (validationModalCloseButton) {
-                validationModalCloseButton.addEventListener('click', hideValidationModal);
-            }
-        }
-
-        function showValidationModal(message, elementToFocus = null) {
-            focusedElementOnError = elementToFocus; // Store element to focus after modal closes
-            if (validationModalMessage && validationModalOverlay && validationModalCloseButton) {
-                validationModalMessage.textContent = message;
-                
-                // Update OK button text using combined translations and CSS for language switching
-                const okButtonTextKey = 'modalOkButton';
-                if (translations[currentLanguage] && translations[currentLanguage][okButtonTextKey]) {
-                    validationModalCloseButton.innerHTML = translations[currentLanguage][okButtonTextKey];
-                    // CSS will handle which span (.lang-en or .lang-zh) is displayed
-                    // based on a class on the body or html element, or by default.
-                    // For simplicity, we assume CSS for .lang-en and .lang-zh within the button works.
-                } else {
-                     validationModalCloseButton.textContent = "OK"; // Fallback
-                }
-                validationModalOverlay.classList.remove('hidden');
-                validationModalOverlay.classList.add('show');
-            } else {
-                console.error("Modal elements not found. Falling back to alert for message:", message);
-                alert(message); 
-            }
-        }
-
-        function hideValidationModal() {
-            if (validationModalOverlay) {
-                validationModalOverlay.classList.remove('show');
-            }
-            if (focusedElementOnError) {
-                focusedElementOnError.focus();
-                focusedElementOnError = null; 
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeModal(); 
-
-            try {
-                emailjs.init(EMAILJS_PUBLIC_KEY); 
-            } catch (e) {
-                console.error("EmailJS initialization failed.", e);
-            }
-
-            setLanguage(currentLanguage); 
-            showPage(currentPage);      
-
-            document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
-            document.getElementById('langZh').addEventListener('click', () => setLanguage('zh'));
-            document.getElementById('langFr').addEventListener('click', () => setLanguage('fr'));
-
-            document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.querySelectorAll('.choice-button[name="guestSide"]').forEach(btn => btn.classList.remove('selected'));
-                    e.currentTarget.classList.add('selected');
-                    const side = e.currentTarget.dataset.value;
-                    document.getElementById('guestSide').value = side;
-                    updateNameRequirementVisuals(side); 
-                });
-            });
-
-            document.querySelectorAll('.choice-button[name="attendance"]').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    document.querySelectorAll('.choice-button[name="attendance"]').forEach(btn => btn.classList.remove('selected'));
-                    e.currentTarget.classList.add('selected');
-                    document.getElementById('attendance').value = e.currentTarget.dataset.value;
-                });
-            });
-            
-            document.getElementById('nextPage1').addEventListener('click', validateAndGoToPage2);
-            document.getElementById('addGuestBtn').addEventListener('click', () => addGuestEntry(false));
-            document.getElementById('prevToPage1').addEventListener('click', () => showPage('page1'));
-            document.getElementById('nextPage2').addEventListener('click', validateAndGoToPage3);
-
-            document.querySelectorAll('input[name="contactMethod"]').forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => toggleContactInput(e.target.value, e.target.checked));
-            });
-            document.getElementById('prevToPage2').addEventListener('click', () => showPage('page2'));
-            document.getElementById('nextPage3').addEventListener('click', validateAndGoToFinalPage);
-            
-            document.getElementById('submitRsvp').addEventListener('click', submitForm);
-        });
-
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.documentElement.lang = lang;
-
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                if (translations[lang] && translations[lang][key]) {
-                    // For modal button, which has HTML content for bilingual text
-                    if (el.id === 'validationModalCloseButton') {
-                         el.innerHTML = translations[lang][key]; // This has the spans
-                    } else {
-                        el.textContent = translations[lang][key]; // Use textContent for most elements
-                    }
-                }
-            });
-
-            document.querySelectorAll('[placeholder-translate]').forEach(el => {
-                const key = el.placeholderTranslate;
-                if (translations[lang] && translations[lang][key]) {
-                    el.placeholder = translations[lang][key];
-                }
-            });
-
-            document.getElementById('langEn').classList.toggle('active', lang === 'en');
-            document.getElementById('langZh').classList.toggle('active', lang === 'zh');
-            document.getElementById('langFr').classList.toggle('active', lang === 'fr');
-
-            const guestSideValue = document.getElementById('guestSide').value;
-            updateNameRequirementVisuals(guestSideValue); 
-            
-            // Style bilingual spans within buttons/elements based on current language
-            document.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => {
-                if (span.classList.contains(`lang-${currentLanguage}`)) {
-                    span.style.display = 'block';
-                } else {
-                    span.style.display = 'none';
-                }
-            });
-            // Special handling for modal button if its text structure differs
-             if (validationModalCloseButton) { // Ensure modal button exists
-                const currentModalOkText = translations[currentLanguage]?.modalOkButton || "OK";
-                validationModalCloseButton.innerHTML = currentModalOkText; // Set its HTML content
-                // The CSS for .modal-button-confirm .lang-en / .lang-zh should now apply
-            }
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.form-page').forEach(page => page.classList.add('hidden'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-                currentPage = pageId;
-                window.scrollTo(0, 0); 
-            } else {
-                console.error("Page not found:", pageId);
-            }
-        }
-
-        function updateNameRequirementVisuals(side) {
-            const chineseNameInput = document.getElementById('chineseName');
-            const englishNameInput = document.getElementById('englishName');
-            const chineseNameStar = document.getElementById('chineseNameStar');
-            const englishNameStar = document.getElementById('englishNameStar');
-            const chineseNameHelper = document.getElementById('chineseNameHelper');
-            const englishNameHelper = document.getElementById('englishNameHelper');
-
-            if (!chineseNameStar || !englishNameStar || !chineseNameHelper || !englishNameHelper || !chineseNameInput || !englishNameInput) {
-                return; 
-            }
-
-            // Reset everything first
-            chineseNameStar.classList.add('hidden');
-            englishNameStar.classList.add('hidden');
-            chineseNameHelper.classList.add('hidden');
-            englishNameHelper.classList.add('hidden');
-            chineseNameHelper.style.fontWeight = 'normal';
-            englishNameHelper.style.fontWeight = 'normal';
-            chineseNameInput.removeAttribute('required');
-            englishNameInput.removeAttribute('required');
-
-
-            if (side === 'groom') {
-                chineseNameStar.classList.remove('hidden');
-                chineseNameHelper.classList.remove('hidden'); 
-                chineseNameHelper.style.fontWeight = 'bold';
-                chineseNameInput.setAttribute('required', 'true');
-            } else if (side === 'bride') {
-                englishNameStar.classList.remove('hidden');
-                englishNameHelper.classList.remove('hidden'); 
-                englishNameHelper.style.fontWeight = 'bold';
-                englishNameInput.setAttribute('required', 'true');
-            }
-            
-            if (translations[currentLanguage]) {
-                 chineseNameHelper.textContent = translations[currentLanguage].chineseNameHelper || "";
-                 englishNameHelper.textContent = translations[currentLanguage].englishNameHelper || "";
-            }
-        }
-
-        function validatePage1() {
-            const guestSide = document.getElementById('guestSide').value;
-            const chineseNameInput = document.getElementById('chineseName');
-            const englishNameInput = document.getElementById('englishName');
-            const emailInput = document.getElementById('email');
-            const attendance = document.getElementById('attendance').value;
-
-            if (!guestSide) {
-                showValidationModal(translations[currentLanguage].validationGuestSide);
-                return false;
-            }
-            if (guestSide === 'groom' && !chineseNameInput.value.trim()) {
-                showValidationModal(translations[currentLanguage].validationChineseNameRequired, chineseNameInput);
-                return false;
-            }
-            if (guestSide === 'bride' && !englishNameInput.value.trim()) {
-                showValidationModal(translations[currentLanguage].validationEnglishNameRequired, englishNameInput);
-                return false;
-            }
-            if (!emailInput.value.trim() || !/^\S+@\S+\.\S+$/.test(emailInput.value.trim())) {
-                showValidationModal(translations[currentLanguage].validationEmail, emailInput);
-                return false;
-            }
-            if (!attendance) {
-                showValidationModal(translations[currentLanguage].validationAttendance);
-                return false;
-            }
-            return true;
-        }
-
-        function validateAndGoToPage2() {
-            if (!validatePage1()) return;
-
-            rsvpData.guestSide = document.getElementById('guestSide').value;
-            rsvpData.chineseName = document.getElementById('chineseName').value.trim();
-            rsvpData.englishName = document.getElementById('englishName').value.trim();
-            rsvpData.email = document.getElementById('email').value.trim();
-            rsvpData.attending = document.getElementById('attendance').value;
-
-            if (rsvpData.attending === 'yes') {
-                if (document.getElementById('guestListContainer').childElementCount === 0) {
-                    addGuestEntry(true); 
-                }
-                showPage('page2');
-            } else {
-                showFinalPageForNoAttending();
-            }
-        }
-        
-        function showFinalPageForNoAttending() {
-            document.getElementById('finalPageContent').classList.remove('hidden');
-            document.getElementById('thankYouMessage').classList.add('hidden');
-            showPage('finalPage');
-        }
-
-        let guestIdCounter = 0; 
-        function addGuestEntry(isFirstGuest = false) {
-            guestIdCounter++;
-            const template = document.getElementById('guestEntryTemplate');
-            if (!template) { return; }
-
-            const clone = template.content.cloneNode(true);
-            const guestEntryDiv = clone.querySelector('.guest-entry');
-            const removeButton = guestEntryDiv.querySelector('.remove-guest-button');
-	    const isChildButton = guestEntryDiv.querySelector('.is-child-button');
-            
-            if (isFirstGuest) 
-	    {
-                removeButton.classList.add('hidden'); 
-		isChildButton.classList.add('hidden'); 
-            }
-	    else
-	    {
-                removeButton.classList.remove('hidden');
-	        isChildButton.classList.remove('hidden');
-                removeButton.addEventListener('click', (e) => removeGuestEntry(e.currentTarget));
-            }
-            
-            guestEntryDiv.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                if (translations[currentLanguage] && translations[currentLanguage][key]) {
-                    // For elements with HTML content (like those with inner spans)
-                    if (el.innerHTML.includes("<span")) { 
-                        el.innerHTML = translations[currentLanguage][key];
-                    } else {
-                        el.textContent = translations[currentLanguage][key];
-                    }
-                }
-            });
-             guestEntryDiv.querySelectorAll('[placeholder-translate]').forEach(el => {
-                const key = el.placeholderTranslate;
-                if (translations[currentLanguage] && translations[currentLanguage][key]) {
-                    el.placeholder = translations[currentLanguage][key];
-                }
-            });
-            const isChildCheckbox = guestEntryDiv.querySelector('input[name="isChild"]');
-            if(isChildCheckbox) {
-                isChildCheckbox.addEventListener('change', (e) => toggleChildOptions(e.target));
-            }
-
-            if (isFirstGuest) {
-                const guestNameInput = guestEntryDiv.querySelector('input[name="guestName"]');
-                const mainChineseName = rsvpData.chineseName; 
-                const mainEnglishName = rsvpData.englishName;
-                let prefilledName = "";
-                if (mainChineseName && mainEnglishName) {
-                    prefilledName = currentLanguage === 'zh' ? `${mainChineseName} (${mainEnglishName})` : `${mainEnglishName} (${mainChineseName})`;
-                } else {
-                    prefilledName = mainChineseName || mainEnglishName || "";
-                }
-                if (guestNameInput) guestNameInput.value = prefilledName;
-            }
-            document.getElementById('guestListContainer').appendChild(guestEntryDiv);
-             // Re-apply language-specific span visibility for newly added guest entry
-            setLanguageSpansVisibility(guestEntryDiv);
-        }
-
-        function setLanguageSpansVisibility(container = document) {
-            container.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => {
-                if (span.classList.contains(`lang-${currentLanguage}`)) {
-                    span.style.display = 'block'; // Or 'inline' or '' depending on original display
-                } else {
-                    span.style.display = 'none';
-                }
-            });
-        }
-         // Modify setLanguage to call the new span visibility function
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.documentElement.lang = lang;
-
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                if (translations[lang] && translations[lang][key]) {
-                     el.innerHTML = translations[lang][key]; // Use innerHTML for all to support spans
-                }
-            });
-            document.querySelectorAll('[placeholder-translate]').forEach(el => {
-                const key = el.placeholderTranslate;
-                if (translations[lang] && translations[lang][key]) {
-                    el.placeholder = translations[lang][key];
-                }
-            });
-
-            document.getElementById('langEn').classList.toggle('active', lang === 'en');
-            document.getElementById('langZh').classList.toggle('active', lang === 'zh');
-            document.getElementById('langFr').classList.toggle('active', lang === 'fr');
-
-            const guestSideValue = document.getElementById('guestSide').value;
-            updateNameRequirementVisuals(guestSideValue); 
-            
-            setLanguageSpansVisibility(); // Update all lang spans in the document
-        }
-
-
-        function removeGuestEntry(button) {
-            button.closest('.guest-entry').remove();
-        }
-
-        function toggleChildOptions(checkbox) {
-            const guestEntry = checkbox.closest('.guest-entry');
-            if (guestEntry) {
-                const childOptionsDiv = guestEntry.querySelector('.child-options');
-                if (childOptionsDiv) {
-                    childOptionsDiv.classList.toggle('hidden', !checkbox.checked);
-                }
-            }
-        }
-
-        function validatePage2() {
-            let isValid = true;
-            let firstInvalidInput = null;
-            const guestEntries = document.querySelectorAll('#guestListContainer .guest-entry');
-            
-            if (rsvpData.attending === 'yes' && guestEntries.length === 0) {
-                showValidationModal(translations[currentLanguage].page2Description); 
-                return false;
-            }
-
-            for (const [index, entry] of guestEntries.entries()) {
-                const nameInput = entry.querySelector('input[name="guestName"]');
-                if (!nameInput || !nameInput.value.trim()) {
-                    showValidationModal(`${translations[currentLanguage].validationGuestNameRequired} (Guest ${index + 1})`, nameInput);
-                    if (!firstInvalidInput) firstInvalidInput = nameInput;
-                    isValid = false;
-                    break; 
-                }
-            }
-            return isValid;
-        }
-        
-        function validateAndGoToPage3() {
-            if (!validatePage2()) return;
-            rsvpData.guests = []; 
-            document.querySelectorAll('#guestListContainer .guest-entry').forEach(entry => {
-                rsvpData.guests.push({
-                    name: entry.querySelector('input[name="guestName"]').value.trim(),
-                    isChild: entry.querySelector('input[name="isChild"]').checked,
-                    childSeat: entry.querySelector('input[name="childSeat"]').checked,
-                    childMeal: entry.querySelector('input[name="childMeal"]').checked,
-                    mealPreference: entry.querySelector('select[name="mealPreference"]').value,
-                    allergies: entry.querySelector('textarea[name="allergies"]').value.trim()
-                });
-            });
-            showPage('page3');
-        }
-
-        function toggleContactInput(methodValue, isChecked) {
-            const inputField = document.getElementById(`contact${methodValue.charAt(0).toUpperCase() + methodValue.slice(1)}Input`);
-            if (inputField) {
-                inputField.classList.toggle('hidden', !isChecked);
-                if (isChecked) {
-                    // Avoid auto-focus here as it can be disruptive when checking multiple boxes
-                } else {
-                    inputField.value = ''; 
-                }
-            }
-        }
-
-        function validatePage3()
-        {
-            const invitationCount = document.getElementById('invitationCount');
-            const addressStreet = document.getElementById('addressStreet');
-            const addressCode = document.getElementById('addressCode');
-            const addressCity = document.getElementById('addressCity');
-            const addressCountry = document.getElementById('addressCountry');
-
-            if (!invitationCount.value) {
-                showValidationModal(translations[currentLanguage].validationInvitationCount, invitationCount);
-                return false;
-            }
-            if (!addressStreet.value.trim() || !addressCode.value.trim() || !addressCity.value.trim() || !addressCountry.value.trim()) {
-                showValidationModal(translations[currentLanguage].validationAddress, addressStreet);
-                return false;
-            }
-            const contactMethodsChecked = document.querySelectorAll('input[name="contactMethod"]:checked');
-            if (contactMethodsChecked.length === 0) {
-                showValidationModal(translations[currentLanguage].validationMinOneContact);
-                return false;
-            }
-
-            let firstInvalidInput = null;
-            for (const checkbox of contactMethodsChecked) {
-                const methodValue = checkbox.value;
-                const inputField = document.getElementById(`contact${methodValue.charAt(0).toUpperCase() + methodValue.slice(1)}Input`);
-                if (!inputField || !inputField.value.trim()) {
-                    const labelSpan = checkbox.closest('.checkbox-label').querySelector('span[data-translate]');
-                    const contactMethodName = labelSpan ? labelSpan.textContent.split('(')[0].trim() : methodValue;
-                    showValidationModal(`${translations[currentLanguage].validationContactMethod}: ${contactMethodName}`, inputField);
-                    if (!firstInvalidInput && inputField) firstInvalidInput = inputField; // Store only the first one
-                    return false; 
-                }
-            }
-            return true;
-        }
-
-        function validateAndGoToFinalPage() {
-            if (!validatePage3()) return;
-            rsvpData.invitationCount = document.getElementById('invitationCount').value;
-            rsvpData.address = {
-                street: document.getElementById('addressStreet').value.trim(),
-                code: document.getElementById('addressCode').value.trim(),
-                city: document.getElementById('addressCity').value.trim(),
-                country: document.getElementById('addressCountry').value.trim()
-            };
-
-	    rsvpData.contactPreferences = {};
-            document.querySelectorAll('input[name="contactMethod"]:checked').forEach(checkbox => {
-                const method = checkbox.value;
-                const inputField = document.getElementById(`contact${method.charAt(0).toUpperCase() + method.slice(1)}Input`);
-                rsvpData.contactPreferences[method] = inputField.value.trim();
-            });
-            
-            document.getElementById('finalPageContent').classList.remove('hidden');
-            document.getElementById('thankYouMessage').classList.add('hidden');
-            showPage('finalPage');
-        }
-
-        function submitForm()
+	if (validationModalCloseButton)
 	{
-            rsvpData.message = document.getElementById('message').value.trim();
-            const emailStatusDiv = document.getElementById('emailStatus');
-            emailStatusDiv.textContent = translations[currentLanguage].emailSending;
-            emailStatusDiv.className = 'email-status-message email-sending'; 
+		validationModalCloseButton.addEventListener('click', hideValidationModal);
+	}
+}
 
-            let emailBody = `<div style="font-family: Arial, sans-serif; color: #333;">`;
-            
-            emailBody += `<h3>Basic Information:</h3><ul>`;
-            emailBody += `<li><strong>Guest side:</strong> ${rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride'}</li>`;
-            emailBody += `<li><strong>Chinese Name:</strong> ${rsvpData.chineseName || 'N/A'}</li>`;
-            emailBody += `<li><strong>English Name:</strong> ${rsvpData.englishName || 'N/A'}</li>`;
-            emailBody += `<li><strong>Email:</strong> ${rsvpData.email}</li>`;
-            emailBody += `<li><strong>Attend:</strong> ${rsvpData.attending === 'yes' ? 'Yes' : 'No'}</li>`;
-            emailBody += `</ul>`;
+function showValidationModal(	message,
+								elementToFocus = null)
+{
+	focusedElementOnError = elementToFocus; 
+	if (validationModalMessage 
+			&& validationModalOverlay
+			&& validationModalCloseButton) 
+	{
+		validationModalMessage.textContent = message;		
+		const okButtonTextKey = 'modalOkButton';
+		if (translations[currentLanguage] 
+				&& translations[currentLanguage][okButtonTextKey])
+		{
+			validationModalCloseButton.innerHTML = translations[currentLanguage][okButtonTextKey];
+		}
+		else
+		{
+			 validationModalCloseButton.textContent = "OK";
+		}
+		validationModalOverlay.classList.remove('hidden');
+		validationModalOverlay.classList.add('show');
+	} 
+	else
+	{
+		console.error("Modal elements not found. Falling back to alert for message:", message);
+		alert(message); 
+	}
+}
 
-            if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0) {
-                emailBody += `<h3>Guest Information:</h3>`;
-                emailBody += `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-                                <thead>
-                                    <tr style="background-color: #f2f2f2;">
-                                        <th>Name</th>
-                                        <th>Children?</th>
-                                        <th>Child Seat?</th>
-                                        <th>Child Meal?</th>
-                                        <th>Meal Preference</th>
-                                        <th>Other (Allergies)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                rsvpData.guests.forEach(guest => {
-                    emailBody += `<tr>
-                                    <td>${guest.name}</td>
-                                    <td>${guest.isChild ? 'Yes' : 'No'}</td>
-                                    <td>${guest.childSeat ? 'Yes' : 'No'}</td>
-                                    <td>${guest.childMeal ? 'Yes' : 'No'}</td>
-                                    <td>${guest.mealPreference}</td>
-                                    <td>${guest.allergies || 'N/A'}</td>
-                                  </tr>`;
-                });
-                emailBody += `</tbody></table>`;
-            
-		    emailBody += `<h3>Contact & Shipping Information:</h3><ul>`;
-		    emailBody += `<li><strong>Phone:</strong> ${rsvpData.contactPreferences.phone || 'N/A'}</li>`;
-		    emailBody += `<li><strong>Email Contact:</strong> ${rsvpData.contactPreferences.email || 'N/A'}</li>`;
-		    emailBody += `<li><strong>Line:</strong> ${rsvpData.contactPreferences.line || 'N/A'}</li>`;
-		    emailBody += `<li><strong>WhatsApp:</strong> ${rsvpData.contactPreferences.whatsapp || 'N/A'}</li>`;
-		    emailBody += `<li><strong>Instagram:</strong> ${rsvpData.contactPreferences.ig || 'N/A'}</li>`;
-		    emailBody += `<li><strong>Facebook:</strong> ${rsvpData.contactPreferences.facebook || 'N/A'}</li>`;
-		    emailBody += `<li><strong>Number of invitation needed:</strong> ${rsvpData.invitationCount}</li>`;
-		    emailBody += `<li><strong>Address:</strong> ${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}</li>`;
-		    emailBody += `</ul>`;
-	    }
-            emailBody += `<h3>Other:</h3>`;
-            emailBody += `<p>${rsvpData.message || 'No message left.'}</p>`;
-            
-            emailBody += `</div>`;
-            
-   
-	   const templateParamsCouple = {
-                email_body: emailBody, 
-                // This 'email' parameter is for the 'To' field in EmailJS.
-                email: rsvpData.email,
-                // This 'emailAS' is for the 'CC' field. Replace the value with your actual email.
-                emailAS: "hubault.anne-so@hotmail.fr", 
-                user_name: rsvpData.englishName || rsvpData.chineseName
-            };
+function hideValidationModal()
+{
+	if (validationModalOverlay) 
+	{
+		validationModalOverlay.classList.remove('show');
+	}
+	if (focusedElementOnError)
+	{
+		focusedElementOnError.focus();
+		focusedElementOnError = null; 
+	}
+}
 
+document.addEventListener('DOMContentLoaded', () => 
+{
+	initializeModal(); 
 
-		 // --- Start of Google Sheet Data Preparation ---	
-		    const sheetData =
-		    {
-		        guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
-		        chineseName: rsvpData.chineseName || 'N/A',
-		        englishName: rsvpData.englishName || 'N/A',
-		        email: rsvpData.email,
-		        attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
-		        invitation: rsvpData.invitationCount,
-		        address: `${rsvpData.address?.street}, ${rsvpData.address?.code}, ${rsvpData.address?.city}, ${rsvpData.address?.country}`,
-		        contactMethod: rsvpData.attending === 'yes' 
-					? Object.entries(rsvpData.contactPreferences)
-		                                .map(([key, value]) => `${key}: ${value}`)
-		                        	.join('\n')
-					: '',
-		        message: rsvpData.message || 'N/A',
-		        guests: rsvpData.guests.map(g => ({ name: g.name,
-							    mealPreference: g.mealPreference,
-					                    allergies: g.allergies,
-					                    isChild: g.isChild,
-					                    needsSeat: g.childSeat,
-					                    needsMeal: g.childMeal}))
-		    };
+	try
+	{
+		emailjs.init(EMAILJS_PUBLIC_KEY); 
+	} 
+	catch (e) 
+	{
+		console.error("EmailJS initialization failed.", e);
+	}
 
-	            fetch(APPS_SCRIPT_URL, 
-		    {
-	                method: 'POST',
-	                mode: 'no-cors', 
-	                headers: {
-	                    'Content-Type': 'application/json',
-	                },
-	                body: JSON.stringify(sheetData)
-	            })
-		    .then(res => console.log("Thank you! Your response has been saved."))
-		    .catch(err => console.log("Something went wrong!"));
-		    // --- End of Google Sheet Data Preparation ---
-		
-            const YOUR_SERVICE_ID = ""; 
-            const YOUR_TEMPLATE_ID_FOR_COUPLE = "";
+	setLanguage(currentLanguage); 
+	showPage(currentPage);      
 
-            if (YOUR_SERVICE_ID === EMAILJS_SERVICE_ID || YOUR_TEMPLATE_ID_FOR_COUPLE === EMAILJS_TEMPLATE_ID) {
-                console.warn("EmailJS Service ID or Template ID not configured.");
-                showValidationModal("Email sending is not configured. Please contact the host.");
-                emailStatusDiv.textContent = "Email sending is not configured.";
-                emailStatusDiv.className = 'email-status-message email-error';
-                
-                document.getElementById('finalPageContent').classList.add('hidden');
-                document.getElementById('thankYouMessage').classList.remove('hidden');
-                updateThankYouMessage();
-                return;
-            }
+	document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
+	document.getElementById('langZh').addEventListener('click', () => setLanguage('zh'));
+	document.getElementById('langFr').addEventListener('click', () => setLanguage('fr'));
 
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParamsCouple)
-                .then((response) => {
-                    console.log('SUCCESS sending email to couple!', response.status, response.text);
-                    emailStatusDiv.textContent = translations[currentLanguage].emailSuccess;
-                    emailStatusDiv.className = 'email-status-message email-success';
-                    document.getElementById('finalPageContent').classList.add('hidden');
-                    document.getElementById('thankYouMessage').classList.remove('hidden');
-                    updateThankYouMessage();
-                })
-                .catch((error) => {
-                    console.error('FAILED to send email...', error);
-                    showValidationModal(translations[currentLanguage].emailError + (error && error.text ? ` (${error.text})` : ""));
-                    emailStatusDiv.textContent = translations[currentLanguage].emailError;
-                    emailStatusDiv.className = 'email-status-message email-error';
-                });
+	document.querySelectorAll('.choice-button[name="guestSide"]').forEach(button =>
+	{
+		button.addEventListener('click', (e) => 
+		{
+			e.preventDefault();
+			document.querySelectorAll('.choice-button[name="guestSide"]').forEach(btn => btn.classList.remove('selected'));
+			e.currentTarget.classList.add('selected');
+			const side = e.currentTarget.dataset.value;
+			document.getElementById('guestSide').value = side;
+			updateNameRequirementVisuals(side); 
+		});
+	});
 
-		
-        }
+	document.querySelectorAll('.choice-button[name="attendance"]').forEach(button => 
+	{
+		button.addEventListener('click', (e) => 
+		{
+			document.querySelectorAll('.choice-button[name="attendance"]').forEach(btn => btn.classList.remove('selected'));
+			e.currentTarget.classList.add('selected');
+			document.getElementById('attendance').value = e.currentTarget.dataset.value;
+		});
+	});
+	
+	document.getElementById('nextPage1').addEventListener('click', validateAndGoToPage2);
+	document.getElementById('addGuestBtn').addEventListener('click', () => addGuestEntry(false));
+	document.getElementById('prevToPage1').addEventListener('click', () => showPage('page1'));
+	document.getElementById('nextPage2').addEventListener('click', validateAndGoToPage3);
+
+	document.querySelectorAll('input[name="contactMethod"]').forEach(checkbox =>
+	{
+		checkbox.addEventListener('change', (e) => toggleContactInput(e.target.value, e.target.checked));
+	});
+	document.getElementById('prevToPage2').addEventListener('click', () => showPage('page2'));
+	document.getElementById('nextPage3').addEventListener('click', validateAndGoToFinalPage);
+	
+	document.getElementById('submitRsvp').addEventListener('click', submitForm);
+});
+
+function setLanguage(lang)
+{
+	currentLanguage = lang;
+	document.documentElement.lang = lang;
+
+	document.querySelectorAll('[data-translate]').forEach(el => 
+	{
+		const key = el.dataset.translate;
+		if (translations[lang]
+				&& translations[lang][key]) 
+		{
+			if (el.id === 'validationModalCloseButton') 
+			{
+				 el.innerHTML = translations[lang][key]; 
+			}
+			else 
+			{
+				el.textContent = translations[lang][key]; 
+			}
+		}
+	});
+
+	document.querySelectorAll('[placeholder-translate]').forEach(el =>
+	{
+		const key = el.placeholderTranslate;
+		if (translations[lang] 
+				&& translations[lang][key])
+		{
+			el.placeholder = translations[lang][key];
+		}
+	});
+
+	document.getElementById('langEn').classList.toggle('active', lang === 'en');
+	document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+	document.getElementById('langFr').classList.toggle('active', lang === 'fr');
+
+	const guestSideValue = document.getElementById('guestSide').value;
+	updateNameRequirementVisuals(guestSideValue); 
+	
+	document.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => 
+	{
+		if (span.classList.contains(`lang-${currentLanguage}`))
+		{
+			span.style.display = 'block';
+		} 
+		else
+		{
+			span.style.display = 'none';
+		}
+	});
+	 
+	if (validationModalCloseButton)
+	{ 
+		const currentModalOkText = translations[currentLanguage]?.modalOkButton || "OK";
+		validationModalCloseButton.innerHTML = currentModalOkText; 
+	}
+}
+
+function showPage(pageId)
+{
+	document.querySelectorAll('.form-page').forEach(page => page.classList.add('hidden'));
+	const targetPage = document.getElementById(pageId);
+	if (targetPage)
+	{
+		targetPage.classList.remove('hidden');
+		currentPage = pageId;
+		window.scrollTo(0, 0); 
+	} 
+	else
+	{
+		console.error("Page not found:", pageId);
+	}
+}
+
+function updateNameRequirementVisuals(side) 
+{
+	const chineseNameInput = document.getElementById('chineseName');
+	const englishNameInput = document.getElementById('englishName');
+	const chineseNameStar = document.getElementById('chineseNameStar');
+	const englishNameStar = document.getElementById('englishNameStar');
+	const chineseNameHelper = document.getElementById('chineseNameHelper');
+	const englishNameHelper = document.getElementById('englishNameHelper');
+
+	if (!chineseNameStar || !englishNameStar || !chineseNameHelper || !englishNameHelper || !chineseNameInput || !englishNameInput) 
+	{
+		return; 
+	}
+
+	// Reset
+	chineseNameStar.classList.add('hidden');
+	englishNameStar.classList.add('hidden');
+	chineseNameHelper.classList.add('hidden');
+	englishNameHelper.classList.add('hidden');
+	chineseNameHelper.style.fontWeight = 'normal';
+	englishNameHelper.style.fontWeight = 'normal';
+	chineseNameInput.removeAttribute('required');
+	englishNameInput.removeAttribute('required');
+
+	if (side === 'groom')
+	{
+		chineseNameStar.classList.remove('hidden');
+		chineseNameHelper.classList.remove('hidden'); 
+		chineseNameHelper.style.fontWeight = 'bold';
+		chineseNameInput.setAttribute('required', 'true');
+	}
+	else if (side === 'bride')
+	{
+		englishNameStar.classList.remove('hidden');
+		englishNameHelper.classList.remove('hidden'); 
+		englishNameHelper.style.fontWeight = 'bold';
+		englishNameInput.setAttribute('required', 'true');
+	}
+	
+	if (translations[currentLanguage]) 
+	{
+		 chineseNameHelper.textContent = translations[currentLanguage].chineseNameHelper || "";
+		 englishNameHelper.textContent = translations[currentLanguage].englishNameHelper || "";
+	}
+}
+
+function validatePage1()
+{
+	const guestSide = document.getElementById('guestSide').value;
+	const chineseNameInput = document.getElementById('chineseName');
+	const englishNameInput = document.getElementById('englishName');
+	const emailInput = document.getElementById('email');
+	const attendance = document.getElementById('attendance').value;
+
+	if (!guestSide) 
+	{
+		showValidationModal(translations[currentLanguage].validationGuestSide);
+		return false;
+	}
+	if (guestSide === 'groom' 
+			&& !chineseNameInput.value.trim()) 
+	{
+		showValidationModal(translations[currentLanguage].validationChineseNameRequired, chineseNameInput);
+		return false;
+	}
+	if (guestSide === 'bride' 
+			&& !englishNameInput.value.trim())
+	{
+		showValidationModal(translations[currentLanguage].validationEnglishNameRequired, englishNameInput);
+		return false;
+	}
+	if (!emailInput.value.trim() 
+			|| !/^\S+@\S+\.\S+$/.test(emailInput.value.trim()))
+	{
+		showValidationModal(translations[currentLanguage].validationEmail, emailInput);
+		return false;
+	}
+	if (!attendance) 
+	{
+		showValidationModal(translations[currentLanguage].validationAttendance);
+		return false;
+	}
+	return true;
+}
+
+function validateAndGoToPage2() 
+{
+	if (!validatePage1())
+	{
+		return;
+	}
+
+	rsvpData.guestSide = document.getElementById('guestSide').value;
+	rsvpData.chineseName = document.getElementById('chineseName').value.trim();
+	rsvpData.englishName = document.getElementById('englishName').value.trim();
+	rsvpData.email = document.getElementById('email').value.trim();
+	rsvpData.attending = document.getElementById('attendance').value;
+
+	if (rsvpData.attending === 'yes') 
+	{
+		if (document.getElementById('guestListContainer').childElementCount === 0)
+		{
+			addGuestEntry(true); 
+		}
+		showPage('page2');
+	} 
+	else
+	{
+		showFinalPageForNoAttending();
+	}
+}
         
-        function updateThankYouMessage() {
-            const thankYouBody = document.querySelector('#thankYouMessage .award-text');
-            if (thankYouBody) {
-                if (rsvpData.attending === 'yes') {
-                    thankYouBody.dataset.translate = "thankYouBodyAttending"; 
-                    thankYouBody.innerHTML = translations[currentLanguage].thankYouBodyAttending;
-                } else {
-                    thankYouBody.dataset.translate = "thankYouBodyNotAttending";
-                    thankYouBody.innerHTML = translations[currentLanguage].thankYouBodyNotAttending;
-                }
-                 setLanguageSpansVisibility(thankYouBody); // Ensure lang spans are correct
-            }
-        }
+function showFinalPageForNoAttending() 
+{
+	document.getElementById('finalPageContent').classList.remove('hidden');
+	document.getElementById('thankYouMessage').classList.add('hidden');
+	showPage('finalPage');
+}
 
-        function resetFormAndGoToStart() {
-            document.querySelectorAll('.rsvp-container input[type="text"], .rsvp-container input[type="email"], .rsvp-container textarea').forEach(input => input.value = '');
-            document.querySelectorAll('.rsvp-container input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-            document.querySelectorAll('.rsvp-container select').forEach(select => select.selectedIndex = 0);
-            document.querySelectorAll('.choice-button.selected').forEach(btn => btn.classList.remove('selected'));
-            
-            const guestSideInput = document.getElementById('guestSide');
-            if(guestSideInput) guestSideInput.value = '';
-            const attendanceInput = document.getElementById('attendance');
-            if(attendanceInput) attendanceInput.value = '';
+let guestIdCounter = 0; 
+function addGuestEntry(isFirstGuest = false) 
+{
+	guestIdCounter++;
+	const template = document.getElementById('guestEntryTemplate');
+	if (!template)
+	{ 
+		return;
+	}
 
-            const guestListContainer = document.getElementById('guestListContainer');
-            if(guestListContainer) guestListContainer.innerHTML = '';
-            guestIdCounter = 0; 
+	const clone = template.content.cloneNode(true);
+	const guestEntryDiv = clone.querySelector('.guest-entry');
+	const removeButton = guestEntryDiv.querySelector('.remove-guest-button');
+	const isChildButton = guestEntryDiv.querySelector('.is-child-button');
+	
+	if (isFirstGuest) 
+	{
+		removeButton.classList.add('hidden'); 
+		isChildButton.classList.add('hidden'); 
+	}
+	else
+	{
+		removeButton.classList.remove('hidden');
+		isChildButton.classList.remove('hidden');
+		removeButton.addEventListener('click', (e) => removeGuestEntry(e.currentTarget));
+	}
+	
+	guestEntryDiv.querySelectorAll('[data-translate]').forEach(el =>
+	{
+		const key = el.dataset.translate;
+		if (translations[currentLanguage] && translations[currentLanguage][key])
+		{
+			if (el.innerHTML.includes("<span")) 
+			{ 
+				el.innerHTML = translations[currentLanguage][key];
+			} 
+			else 
+			{
+				el.textContent = translations[currentLanguage][key];
+			}
+		}
+	});
+	
+	guestEntryDiv.querySelectorAll('[placeholder-translate]').forEach(el =>
+	{
+		const key = el.placeholderTranslate;
+		if (translations[currentLanguage] 
+				&& translations[currentLanguage][key]) 
+		{
+			el.placeholder = translations[currentLanguage][key];
+		}
+	});
+	const isChildCheckbox = guestEntryDiv.querySelector('input[name="isChild"]');
+	if(isChildCheckbox)
+	{
+		isChildCheckbox.addEventListener('change', (e) => toggleChildOptions(e.target));
+	}
 
-            document.querySelectorAll('.contact-input').forEach(input => input.classList.add('hidden'));
+	if (isFirstGuest) 
+	{
+		const guestNameInput = guestEntryDiv.querySelector('input[name="guestName"]');
+		const mainChineseName = rsvpData.chineseName; 
+		const mainEnglishName = rsvpData.englishName;
+		let prefilledName = "";
+		if (mainChineseName
+				&& mainEnglishName)
+		{
+			prefilledName = currentLanguage === 'zh' ? `${mainChineseName} (${mainEnglishName})` : `${mainEnglishName} (${mainChineseName})`;
+		}
+		else
+		{
+			prefilledName = mainChineseName || mainEnglishName || "";
+		}
+		if (guestNameInput)
+		{
+			guestNameInput.value = prefilledName;
+		}
+	}
+	document.getElementById('guestListContainer').appendChild(guestEntryDiv);
+	setLanguageSpansVisibility(guestEntryDiv);
+}
 
-            const cnStar = document.getElementById('chineseNameStar');
-            if(cnStar) cnStar.classList.add('hidden');
-            const enStar = document.getElementById('englishNameStar');
-            if(enStar) enStar.classList.add('hidden');
-            const cnHelper = document.getElementById('chineseNameHelper');
-            if(cnHelper) cnHelper.classList.add('hidden');
-            const enHelper = document.getElementById('englishNameHelper');
-            if(enHelper) enHelper.classList.add('hidden');
+function setLanguageSpansVisibility(container = document) 
+{
+	container.querySelectorAll('.lang-en, .lang-zh, .lang-fr').forEach(span => 
+	{
+		if (span.classList.contains(`lang-${currentLanguage}`))
+		{
+			span.style.display = 'block'; 
+		} 
+		else
+		{
+			span.style.display = 'none';
+		}
+	});
+}
 
+function setLanguage(lang)
+{
+	currentLanguage = lang;
+	document.documentElement.lang = lang;
 
-            Object.keys(rsvpData).forEach(key => {
-                if (Array.isArray(rsvpData[key])) rsvpData[key] = [];
-                else if (typeof rsvpData[key] === 'object' && rsvpData[key] !== null) {
-                    for (const prop in rsvpData[key]) delete rsvpData[key][prop];
-                } else delete rsvpData[key];
-            });
-            rsvpData.guests = []; 
+	document.querySelectorAll('[data-translate]').forEach(el => 
+	{
+		const key = el.dataset.translate;
+		if (translations[lang] 
+				&& translations[lang][key]) 
+		{
+			 el.innerHTML = translations[lang][key]; 
+		}
+	});
+	document.querySelectorAll('[placeholder-translate]').forEach(el => 
+	{
+		const key = el.placeholderTranslate;
+		if (translations[lang] 
+				&& translations[lang][key]) 
+		{
+			el.placeholder = translations[lang][key];
+		}
+	});
 
-            const finalPageContent = document.getElementById('finalPageContent');
-            if(finalPageContent) finalPageContent.classList.remove('hidden');
-            const thankYouMsg = document.getElementById('thankYouMessage');
-            if(thankYouMsg) thankYouMsg.classList.add('hidden');
+	document.getElementById('langEn').classList.toggle('active', lang === 'en');
+	document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+	document.getElementById('langFr').classList.toggle('active', lang === 'fr');
 
-            const emailStatus = document.getElementById('emailStatus');
-            if(emailStatus) {
-                emailStatus.textContent = '';
-                emailStatus.className = 'email-status-message';
-            }
+	const guestSideValue = document.getElementById('guestSide').value;
+	updateNameRequirementVisuals(guestSideValue); 
+	
+	setLanguageSpansVisibility(); 
+}
 
-            setLanguage(currentLanguage); 
-            showPage('page1'); 
-        }
+function removeGuestEntry(button)
+{
+	button.closest('.guest-entry').remove();
+}
+
+function toggleChildOptions(checkbox)
+{
+	const guestEntry = checkbox.closest('.guest-entry');
+	if (guestEntry)
+	{
+		const childOptionsDiv = guestEntry.querySelector('.child-options');
+		if (childOptionsDiv) 
+		{
+			childOptionsDiv.classList.toggle('hidden', !checkbox.checked);
+		}
+	}
+}
+
+function validatePage2() 
+{
+	let isValid = true;
+	let firstInvalidInput = null;
+	const guestEntries = document.querySelectorAll('#guestListContainer .guest-entry');
+	
+	if (rsvpData.attending === 'yes' 
+			&& guestEntries.length === 0)
+	{
+		showValidationModal(translations[currentLanguage].page2Description); 
+		return false;
+	}
+
+	for (const [index, entry] of guestEntries.entries()) 
+	{
+		const nameInput = entry.querySelector('input[name="guestName"]');
+		if (!nameInput 
+				|| !nameInput.value.trim())
+		{
+			showValidationModal(`${translations[currentLanguage].validationGuestNameRequired} (Guest ${index + 1})`, nameInput);
+			if (!firstInvalidInput)
+			{
+				firstInvalidInput = nameInput;
+			}
+			isValid = false;
+			break; 
+		}
+	}
+	return isValid;
+}
+        
+function validateAndGoToPage3() 
+{
+	if (!validatePage2()) return;
+	rsvpData.guests = []; 
+	document.querySelectorAll('#guestListContainer .guest-entry').forEach(entry =>
+	{
+		rsvpData.guests.push({
+			name: entry.querySelector('input[name="guestName"]').value.trim(),
+			isChild: entry.querySelector('input[name="isChild"]').checked,
+			childSeat: entry.querySelector('input[name="childSeat"]').checked,
+			childMeal: entry.querySelector('input[name="childMeal"]').checked,
+			mealPreference: entry.querySelector('select[name="mealPreference"]').value,
+			allergies: entry.querySelector('textarea[name="allergies"]').value.trim()
+		});
+	});
+	showPage('page3');
+}
+
+function toggleContactInput(methodValue, isChecked) 
+{
+	const inputField = document.getElementById(`contact${methodValue.charAt(0).toUpperCase() + methodValue.slice(1)}Input`);
+	if (inputField)
+	{
+		inputField.classList.toggle('hidden', !isChecked);
+		if (isChecked)
+		{
+			// Avoid auto-focus
+		}
+		else 
+		{
+			inputField.value = ''; 
+		}
+	}
+}
+
+function validatePage3()
+{
+	const invitationCount = document.getElementById('invitationCount');
+	const addressStreet = document.getElementById('addressStreet');
+	const addressCode = document.getElementById('addressCode');
+	const addressCity = document.getElementById('addressCity');
+	const addressCountry = document.getElementById('addressCountry');
+
+	if (!invitationCount.value)
+	{
+		showValidationModal(translations[currentLanguage].validationInvitationCount, invitationCount);
+		return false;
+	}
+	if (!addressStreet.value.trim() || !addressCode.value.trim() || !addressCity.value.trim() || !addressCountry.value.trim()) 
+	{
+		showValidationModal(translations[currentLanguage].validationAddress, addressStreet);
+		return false;
+	}
+	const contactMethodsChecked = document.querySelectorAll('input[name="contactMethod"]:checked');
+	if (contactMethodsChecked.length === 0)
+	{
+		showValidationModal(translations[currentLanguage].validationMinOneContact);
+		return false;
+	}
+
+	let firstInvalidInput = null;
+	for (const checkbox of contactMethodsChecked) 
+	{
+		const methodValue = checkbox.value;
+		const inputField = document.getElementById(`contact${methodValue.charAt(0).toUpperCase() + methodValue.slice(1)}Input`);
+		if (!inputField || !inputField.value.trim()) 
+		{
+			const labelSpan = checkbox.closest('.checkbox-label').querySelector('span[data-translate]');
+			const contactMethodName = labelSpan ? labelSpan.textContent.split('(')[0].trim() : methodValue;
+			showValidationModal(`${translations[currentLanguage].validationContactMethod}: ${contactMethodName}`, inputField);
+			if (!firstInvalidInput && inputField) 
+			{
+				firstInvalidInput = inputField; 
+			}
+			return false; 
+		}
+	}
+	return true;
+}
+
+function validateAndGoToFinalPage()
+{
+	if (!validatePage3()) 
+	{
+		return;
+	}
+	rsvpData.invitationCount = document.getElementById('invitationCount').value;
+	rsvpData.address = {
+		street: document.getElementById('addressStreet').value.trim(),
+		code: document.getElementById('addressCode').value.trim(),
+		city: document.getElementById('addressCity').value.trim(),
+		country: document.getElementById('addressCountry').value.trim()
+	};
+
+	rsvpData.contactPreferences = {};
+	document.querySelectorAll('input[name="contactMethod"]:checked').forEach(checkbox =>
+	{
+		const method = checkbox.value;
+		const inputField = document.getElementById(`contact${method.charAt(0).toUpperCase() + method.slice(1)}Input`);
+		rsvpData.contactPreferences[method] = inputField.value.trim();
+	});
+	
+	document.getElementById('finalPageContent').classList.remove('hidden');
+	document.getElementById('thankYouMessage').classList.add('hidden');
+	showPage('finalPage');
+}
+
+function submitForm()
+{
+	rsvpData.message = document.getElementById('message').value.trim();
+	const emailStatusDiv = document.getElementById('emailStatus');
+	emailStatusDiv.textContent = translations[currentLanguage].emailSending;
+	emailStatusDiv.className = 'email-status-message email-sending'; 
+
+	let emailBody = `<div style="font-family: Arial, sans-serif; color: #333;">`;
+	
+	emailBody += `<h3>Basic Information:</h3><ul>`;
+	emailBody += `<li><strong>Guest side:</strong> ${rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride'}</li>`;
+	emailBody += `<li><strong>Chinese Name:</strong> ${rsvpData.chineseName || 'N/A'}</li>`;
+	emailBody += `<li><strong>English Name:</strong> ${rsvpData.englishName || 'N/A'}</li>`;
+	emailBody += `<li><strong>Email:</strong> ${rsvpData.email}</li>`;
+	emailBody += `<li><strong>Attend:</strong> ${rsvpData.attending === 'yes' ? 'Yes' : 'No'}</li>`;
+	emailBody += `</ul>`;
+
+	if (rsvpData.attending === 'yes' && rsvpData.guests && rsvpData.guests.length > 0)
+	{
+		emailBody += `<h3>Guest Information:</h3>`;
+		emailBody += `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+						<thead>
+							<tr style="background-color: #f2f2f2;">
+								<th>Name</th>
+								<th>Children?</th>
+								<th>Child Seat?</th>
+								<th>Child Meal?</th>
+								<th>Meal Preference</th>
+								<th>Other (Allergies)</th>
+							</tr>
+						</thead>
+						<tbody>`;
+		rsvpData.guests.forEach(guest => {
+			emailBody += `<tr>
+							<td>${guest.name}</td>
+							<td>${guest.isChild ? 'Yes' : 'No'}</td>
+							<td>${guest.childSeat ? 'Yes' : 'No'}</td>
+							<td>${guest.childMeal ? 'Yes' : 'No'}</td>
+							<td>${guest.mealPreference}</td>
+							<td>${guest.allergies || 'N/A'}</td>
+						  </tr>`;
+		});
+		emailBody += `</tbody></table>`;
+	
+		emailBody += `<h3>Contact & Shipping Information:</h3><ul>`;
+		emailBody += `<li><strong>Phone:</strong> ${rsvpData.contactPreferences.phone || 'N/A'}</li>`;
+		emailBody += `<li><strong>Email Contact:</strong> ${rsvpData.contactPreferences.email || 'N/A'}</li>`;
+		emailBody += `<li><strong>Line:</strong> ${rsvpData.contactPreferences.line || 'N/A'}</li>`;
+		emailBody += `<li><strong>WhatsApp:</strong> ${rsvpData.contactPreferences.whatsapp || 'N/A'}</li>`;
+		emailBody += `<li><strong>Instagram:</strong> ${rsvpData.contactPreferences.ig || 'N/A'}</li>`;
+		emailBody += `<li><strong>Facebook:</strong> ${rsvpData.contactPreferences.facebook || 'N/A'}</li>`;
+		emailBody += `<li><strong>Number of invitation needed:</strong> ${rsvpData.invitationCount}</li>`;
+		emailBody += `<li><strong>Address:</strong> ${rsvpData.address.street}, ${rsvpData.address.city}, ${rsvpData.address.code}, ${rsvpData.address.country}</li>`;
+		emailBody += `</ul>`;
+	}
+	emailBody += `<h3>Other:</h3>`;
+	emailBody += `<p>${rsvpData.message || 'No message left.'}</p>`;
+	emailBody += `</div>`;
+	
+	const templateParamsCouple = {
+		email_body: emailBody, 
+		email: rsvpData.email,
+		emailAS: "hubault.anne-so@hotmail.fr", 
+		user_name: rsvpData.englishName || rsvpData.chineseName
+	};
+
+	const sheetData =
+	{
+		guestSide: rsvpData.guestSide === 'groom' ? 'Groom' : 'Bride',
+		chineseName: rsvpData.chineseName || 'N/A',
+		englishName: rsvpData.englishName || 'N/A',
+		email: rsvpData.email,
+		attending: rsvpData.attending === 'yes' ? 'Yes' : 'No',
+		invitation: rsvpData.invitationCount,
+		address: `${rsvpData.address?.street}, ${rsvpData.address?.code}, ${rsvpData.address?.city}, ${rsvpData.address?.country}`,
+		contactMethod: rsvpData.attending === 'yes' 
+							? Object.entries(rsvpData.contactPreferences)
+												.map(([key, value]) => `${key}: ${value}`)
+											.join('\n')
+							: '',
+		message: rsvpData.message || 'N/A',
+		guests: rsvpData.guests.map(g => ({ name: g.name,
+						mealPreference: g.mealPreference,
+								allergies: g.allergies,
+								isChild: g.isChild,
+								needsSeat: g.childSeat,
+								needsMeal: g.childMeal}))
+	};
+
+	fetch(APPS_SCRIPT_URL, 
+	{
+		method: 'POST',
+		mode: 'no-cors', 
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(sheetData)
+	});
+
+	const YOUR_SERVICE_ID = ""; 
+	const YOUR_TEMPLATE_ID_FOR_COUPLE = "";
+
+	if (YOUR_SERVICE_ID === EMAILJS_SERVICE_ID || YOUR_TEMPLATE_ID_FOR_COUPLE === EMAILJS_TEMPLATE_ID) 
+	{
+		console.warn("EmailJS Service ID or Template ID not configured.");
+		showValidationModal("Email sending is not configured. Please contact the host.");
+		emailStatusDiv.textContent = "Email sending is not configured.";
+		emailStatusDiv.className = 'email-status-message email-error';
+		
+		document.getElementById('finalPageContent').classList.add('hidden');
+		document.getElementById('thankYouMessage').classList.remove('hidden');
+		updateThankYouMessage();
+		return;
+	}
+
+	emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParamsCouple)
+		.then((response) => 
+		{
+			console.log('SUCCESS sending email to couple!', response.status, response.text);
+			emailStatusDiv.textContent = translations[currentLanguage].emailSuccess;
+			emailStatusDiv.className = 'email-status-message email-success';
+			document.getElementById('finalPageContent').classList.add('hidden');
+			document.getElementById('thankYouMessage').classList.remove('hidden');
+			updateThankYouMessage();
+		})
+		.catch((error) =>
+		{
+			console.error('FAILED to send email...', error);
+			showValidationModal(translations[currentLanguage].emailError + (error && error.text ? ` (${error.text})` : ""));
+			emailStatusDiv.textContent = translations[currentLanguage].emailError;
+			emailStatusDiv.className = 'email-status-message email-error';
+		});
+}
+        
+function updateThankYouMessage()
+{
+	const thankYouBody = document.querySelector('#thankYouMessage .award-text');
+	if (thankYouBody)
+	{
+		if (rsvpData.attending === 'yes')
+		{
+			thankYouBody.dataset.translate = "thankYouBodyAttending"; 
+			thankYouBody.innerHTML = translations[currentLanguage].thankYouBodyAttending;
+		} else
+		{
+			thankYouBody.dataset.translate = "thankYouBodyNotAttending";
+			thankYouBody.innerHTML = translations[currentLanguage].thankYouBodyNotAttending;
+		}
+		 setLanguageSpansVisibility(thankYouBody); // Ensure lang spans are correct
+	}
+}
+
+function resetFormAndGoToStart() 
+{
+	document.querySelectorAll('.rsvp-container input[type="text"], .rsvp-container input[type="email"], .rsvp-container textarea').forEach(input => input.value = '');
+	document.querySelectorAll('.rsvp-container input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+	document.querySelectorAll('.rsvp-container select').forEach(select => select.selectedIndex = 0);
+	document.querySelectorAll('.choice-button.selected').forEach(btn => btn.classList.remove('selected'));
+	
+	const guestSideInput = document.getElementById('guestSide');
+	if(guestSideInput)
+	{
+		guestSideInput.value = '';
+	}
+	const attendanceInput = document.getElementById('attendance');
+	if(attendanceInput) 
+	{
+		attendanceInput.value = '';
+	}
+
+	const guestListContainer = document.getElementById('guestListContainer');
+	if(guestListContainer)
+	{
+		guestListContainer.innerHTML = '';
+	}
+	guestIdCounter = 0; 
+
+	document.querySelectorAll('.contact-input').forEach(input => input.classList.add('hidden'));
+
+	const cnStar = document.getElementById('chineseNameStar');
+	if(cnStar)
+	{ 
+		cnStar.classList.add('hidden');
+	} 
+	const enStar = document.getElementById('englishNameStar');
+	if(enStar)
+	{ 
+		enStar.classList.add('hidden');
+	} 
+	const cnHelper = document.getElementById('chineseNameHelper');
+	if(cnHelper)
+	{ 
+		cnHelper.classList.add('hidden');
+	} 
+	const enHelper = document.getElementById('englishNameHelper');
+	if(enHelper)
+	{ 
+		enHelper.classList.add('hidden');
+	} 
+
+	Object.keys(rsvpData).forEach(key => 
+	{
+		if (Array.isArray(rsvpData[key]))
+		{
+			rsvpData[key] = [];
+		}
+		else if (typeof rsvpData[key] === 'object' && rsvpData[key] !== null)
+		{
+			for (const prop in rsvpData[key])
+			{
+				delete rsvpData[key][prop];
+			}
+		} 
+		else 
+		{
+			delete rsvpData[key];
+		}
+	});
+	rsvpData.guests = []; 
+
+	const finalPageContent = document.getElementById('finalPageContent');
+	if(finalPageContent) 
+	{
+		finalPageContent.classList.remove('hidden');
+	}
+	const thankYouMsg = document.getElementById('thankYouMessage');
+	if(thankYouMsg) 
+	{
+		thankYouMsg.classList.add('hidden');
+	}
+
+	const emailStatus = document.getElementById('emailStatus');
+	if(emailStatus)
+	{
+		emailStatus.textContent = '';
+		emailStatus.className = 'email-status-message';
+	}
+
+	setLanguage(currentLanguage); 
+	showPage('page1'); 
+}
