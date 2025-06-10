@@ -606,72 +606,72 @@ hr.guest-divider
 	.rsvp-container 
 	{	
 	    padding: 0; 
-  }
+  	}
 		
-  .main-content
+ 	.main-content
 	{
 			padding: 0 1.5rem 1.5rem 1.5rem; 
-  }
+  	}
 		 
-  #rsvpHeader
+  	#rsvpHeader
 	{
-     padding: 1.5rem 1rem 1rem 1rem;
-     min-height: 200px;
+		     padding: 1.5rem 1rem 1rem 1rem;
+		     min-height: 200px;
 	}
 		
 	.romantic-font
 	{
-      font-size: 2.2rem;
-  }
+      			font-size: 2.2rem;
+  	}
 		
    	.form-button
-		{
-				padding: 0.7rem 1.5rem;
-				font-size: 0.9rem; 
+	{
+			padding: 0.7rem 1.5rem;
+			font-size: 0.9rem; 
    	}
 		
-		.form-button .lang-en
-		{
-				font-size: 0.75em; 
-		}
+	.form-button .lang-en
+	{
+			font-size: 0.75em; 
+	}
+	
+	.choice-button
+	{
+			padding: 0.75rem;
+	}
 		
-		.choice-button
-		{
-				padding: 0.75rem;
-		}
-		
-		.navigation-buttons 
-		{
-				flex-direction: column; 
-				align-items: center;
-		}
-		
-		.navigation-buttons .form-button
-		{
-				width: 80%; 
-				max-width: 300px;
-		}
-		
-		.modal-content-box 
-		{
-				width: 85%;
-				padding: 1.5rem;
-		}
-		
-		.modal-message-text
-		{
-				font-size: 1rem;
-		}
+	.navigation-buttons 
+	{
+			flex-direction: column; 
+			align-items: center;
+	}
+	
+	.navigation-buttons .form-button
+	{
+			width: 80%; 
+			max-width: 300px;
+	}
+	
+	.modal-content-box 
+	{
+			width: 85%;
+			padding: 1.5rem;
+	}
+	
+	.modal-message-text
+	{
+			font-size: 1rem;
+	}
+	 
+	.modal-button-confirm 
+	{
+			padding: 0.6rem 1.2rem;
+			font-size: 0.85rem;
+	 }
 		 
-		.modal-button-confirm 
-		{
-				padding: 0.6rem 1.2rem;
-				font-size: 0.85rem;
-		 }
-		 
-	 .address-row
-		{
-				flex-direction: column;
-				gap: 0; 
-		}
+	.address-row
+	{
+			flex-direction: column;
+			gap: 0; 
+	}
 }
